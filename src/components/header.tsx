@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import Logo from "../assets/img/svg/KFTC.svg";
 import { useState, useRef } from "react";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -37,9 +38,11 @@ export const Header = () => {
     return (
         <Container>
             <Wrapper>
-                <LogoImg src={Logo} alt="kFTC" />
+                <Link to={'/'}>
+                    <LogoImg src={Logo} alt="kFTC" />
+                </Link>
                 <NavWrapper>
-                    <p>클래스 소개</p>
+                    <NavItem to={'/introduce/greeting'}>클래스 소개</NavItem>
                     <p 
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
@@ -65,7 +68,7 @@ export const Header = () => {
                     onMouseLeave={handleMouseLeave}
                     style={{ top: dropdownPos.top, left: dropdownPos.left }}
                 >
-                    <p>교육 과정</p>
+                    <EducationNavItem to={'/education/process'}>교육 과정</EducationNavItem>
                     <Line />
                     <p>교육 일정</p>
                     <Line />
@@ -91,6 +94,28 @@ const Wrapper = styled.div`
 
 const LogoImg = styled.img`
     padding-left: 70px;
+`;
+
+const NavItem = styled(Link)`
+  font-size: 15px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    color: rgba(255, 255, 255, 0.8);
+    transition: 0.2s;
+  }
+`;
+
+const EducationNavItem = styled(Link)`
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+        &:hover {
+            color: white;
+        }
 `;
 
 const NavWrapper = styled.div`
@@ -126,6 +151,7 @@ const DropDownWrapper = styled.div`
     border-radius: 10px;
     background-color: rgba(36, 36, 36, 0.84);
     cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.2);
     > p {
         font-size: 13px;
         color: rgba(255,255,255,0.7);
