@@ -50,10 +50,10 @@ export const Header = () => {
                     >
                         교육
                     </p>
-                    <p>Form Taping 자료실</p>
-                    <p>한국전문테이핑관리사</p>
-                    <p>클래스 앨범</p>
-                    <p>관련 SNS</p>
+                    <NavItem to={'/formTaping'}>Form Taping 자료실</NavItem>
+                    <NavItem to={'/tapingManager'}>한국전문테이핑관리사</NavItem>
+                    <NavItem to={'/classAlbum'}>클래스 앨범</NavItem>
+                    <NavItem to={'/sns'}>관련 SNS</NavItem>
                 </NavWrapper>
                 <GuestCount>오늘 23명이 방문했어요</GuestCount>
             </Wrapper>
@@ -70,9 +70,9 @@ export const Header = () => {
                 >
                     <EducationNavItem to={'/education/process'}>교육 과정</EducationNavItem>
                     <Line />
-                    <p>교육 일정</p>
+                    <EducationNavItem to={'/education/schedule'}>교육 일정</EducationNavItem>
                     <Line />
-                    <p>교육 등록 및 결제방법</p>
+                    <EducationNavItem to={'/education/registration'}>교육 등록 및 결제방법</EducationNavItem>
                 </DropDownWrapper>
             }
         </Container>
@@ -149,7 +149,7 @@ const DropDownWrapper = styled.div`
     gap: 10px;
     z-index: 10;
     border-radius: 10px;
-    background-color: rgba(36, 36, 36, 0.84);
+    background-color: #242424;
     cursor: pointer;
     border: 1px solid rgba(255,255,255,0.2);
     > p {

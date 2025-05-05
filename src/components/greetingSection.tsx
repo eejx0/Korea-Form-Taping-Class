@@ -40,6 +40,7 @@ const Wrapper = styled.div`
     color: #333;
     padding-left: 30px;
     line-height: 1.3;
+    height: auto;
 
     ul {
         margin: 16px 0;
