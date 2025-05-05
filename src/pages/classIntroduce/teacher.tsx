@@ -24,6 +24,7 @@ export const Teacher = () => {
                 break;
         }
     }
+
     return (
         <>
             <Header />
@@ -78,6 +79,18 @@ const Wrapper = styled.div`
     padding-right: 270px;
     flex-direction: column;
     height: calc(100vh - 90px - 84px);
+    @media (max-width: 1300px) {
+        padding-left: 200px;
+        padding-right: 200px;
+    }
+    @media (max-width: 1175px) {
+        padding-left: 50px;
+        padding-right: 50px;
+    }
+    @media (max-width: 875px) {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
 `;
 
 const Container = styled.div`
@@ -96,24 +109,41 @@ const ListWrapper = styled.div`
 `;
 
 const Circle = styled.div<{ $isSelected: boolean }>`
-    width: ${({ $isSelected }) => ($isSelected ? "104px" : "90px")};
-    height: ${({ $isSelected }) => ($isSelected ? "104px" : "90px")};
-    background-color: ${({ $isSelected }) =>
-        $isSelected ? "#588DFF" : "#355599"};
+    width: 90px;
+    height: 90px;
+    background-color: #355599;
+    font-size: 15px;
+
+    ${({ $isSelected }) =>
+        $isSelected &&
+        `
+        width: 104px;
+        height: 104px;
+        background-color: #588DFF;
+        font-size: 20px;
+    `}
+
+    &:hover {
+        width: 104px;
+        height: 104px;
+        background-color: #588DFF;
+        font-size: 20px;
+    }
+
     border-radius: 50%;
-    font-size: ${({ $isSelected }) => ($isSelected ? "20px" : "15px")};
     font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    transition: all 0.2s;
 `;
 
 const ContentWrapper = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
-    margin-top: 35px;
+    margin-top: 50px;
     height: 100%;
     > p {
         font-size: 25px;
