@@ -14,7 +14,7 @@ export const Table = ({data}: TableProps) => {
 
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerHeight < 734) {
+            if (window.innerHeight < 740) {
                 setListNum(7);
             } else if (window.innerHeight < 920){
                 setListNum(10);
@@ -89,7 +89,7 @@ const Wrapper = styled.table`
             .date {
                 font-size: 15px;
                 font-weight: 500;
-                color: rgba(255,255,255,0.5);
+                color: ${({theme}) => theme.detailText};
                 width: 120px;
             }
         }
@@ -98,7 +98,7 @@ const Wrapper = styled.table`
         > tr {
             > td {
                 border: none;
-                border-bottom: 1px solid #414142;
+                border-bottom: 1px solid ${({theme}) => theme.tableLine};
                 font-size: 15px;
                 font-weight: 500;
                 cursor: pointer;
@@ -106,7 +106,7 @@ const Wrapper = styled.table`
             .date {
                 font-size: 15px;
                 font-weight: 500;
-                color: rgba(255,255,255,0.5);
+                color: ${({theme}) => theme.detailText};
             }
         }
     }

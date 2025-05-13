@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import { Header } from "../../components/header";
 import { Table } from "../../components/table";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +11,6 @@ export const TapingManagerList = () => {
 
     return (
         <>
-            <Header/>
             <Wrapper>
                 <TitleWrapper>
                     <p>한국전문테이핑관리사 일정</p>

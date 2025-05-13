@@ -1,9 +1,9 @@
 import styled from "styled-components"
-import Arrow from "../../../assets/img/svg/rightArrow.svg";
-import File from "../../../assets/img/svg/file.svg";
+import Arrow from "../../assets/img/svg/rightArrow.svg";
+import File from "../../assets/img/svg/file.svg";
 import { useState } from "react";
 
-export const EducationScheduleWrite = () => {
+export const ClassAlbumWrite = () => {
     const [password, setPassword] = useState<string>('');
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -33,15 +33,25 @@ export const EducationScheduleWrite = () => {
                 </InputWrapper>
                 {isOpen && (
                     <ContentWrapper>
-                        <p>교육 일정 글쓰기</p>
+                        <p>클래스 앨범 사진 올리기</p>
                         <TitleInputWrapper>
                             <Input placeholder="제목을 입력해주세요"/>
                             <AddFileWrapper>
                                 <button>파일 선택</button>
-                                <FileName>
-                                    <img src={File} alt="파일명" />
-                                    <p>2025년 경북 김천 5월 11일 KFT-1st class. hwp</p>
-                                </FileName>
+                                <Files>
+                                    <FileName>
+                                        <img src={File} alt="파일명" />
+                                        <p>2025년 경북 김천 5월 11일 KFT-1st class. hwp</p>
+                                    </FileName>
+                                    <FileName>
+                                        <img src={File} alt="파일명" />
+                                        <p>2025년 경북 김천 5월 11일 KFT-1st class. hwp</p>
+                                    </FileName>
+                                    <FileName>
+                                        <img src={File} alt="파일명" />
+                                        <p>2025년 경북 김천 5월 11일 KFT-1st class. hwp</p>
+                                    </FileName>
+                                </Files>
                             </AddFileWrapper>
                         </TitleInputWrapper>
                     </ContentWrapper>
@@ -57,6 +67,7 @@ const Wrapper = styled.div`
     padding-right: 270px;
     flex-direction: column;
     margin-top: 70px;
+    margin-bottom: 70px;
     gap: 50px;
     @media (max-width: 1300px) {
         padding-left: 200px;
@@ -123,8 +134,8 @@ const Button = styled.button<{$active: boolean}>`
     cursor: ${({ $active }) => ($active ? "pointer" : "not-allowed")};
     transition: 0.2s;
     > p {
-        color: white;
         font-weight: 600;
+        color: white;
         font-size: 15px;
     }
 `;
@@ -150,12 +161,12 @@ const TitleInputWrapper = styled.div`
 
 const AddFileWrapper = styled.div`
     display: flex;
-    align-items: center;
     gap: 35px;
-    height: 50px;
+    width: 100%;
+    justify-content: space-between;
     > button {
         width: 250px;
-        height: 100%;
+        height: 50px;
         border-radius: 30px;
         border: none;
         background-color: #588DFF;
@@ -170,15 +181,22 @@ const AddFileWrapper = styled.div`
     }
 `;
 
+const Files = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+`;
+
 const FileName = styled.div`
     display: flex;
     width: 100%;
-    height: 100%;
+    height: 50px;
     background-color: ${({theme}) => theme.inputBackground};
     border-radius: 8px;
+    border: 1px solid ${({theme}) => theme.inputBorder};
     padding: 0px 18px 0px 18px;
     align-items: center;
-    border: 1px solid ${({theme}) => theme.inputBorder};
     gap: 20px;
     > p {
         font-size: 15px;

@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import { Header } from "../../components/header";
 import Arrow from "../../assets/img/svg/rightArrow.svg";
 import File from "../../assets/img/svg/file.svg";
 import { useState } from "react";
@@ -16,7 +15,6 @@ export const TapingManagerWrite = () => {
 
     return (
         <>
-            <Header />
             <Wrapper>
                 <TitleWrapper>
                     <p>비밀번호를 입력해주세요</p>
@@ -87,7 +85,7 @@ const TitleWrapper = styled.div`
 const SubTitle = styled.div`
     font-size: 15px;
     font-weight: 400;
-    color: rgba(255,255,255,0.5);
+    color: ${({theme}) => theme.detailText};
 `;
 
 const InputWrapper = styled.div`
@@ -100,13 +98,13 @@ const InputWrapper = styled.div`
 const Input = styled.input`
     height: 50px;
     width: 100%;
-    border: none;
+    border: 1px solid ${({theme}) => theme.inputBorder};
     outline: none;
-    background-color: #414142;
+    background-color: ${({theme}) => theme.inputBackground};
     border-radius: 12px;
     padding: 0px 20px 0px 20px;
     font-size: 15px;
-    color: white;
+    color: ${({theme}) => theme.text};
 `;
 
 const Button = styled.button<{$active: boolean}>`
@@ -125,6 +123,7 @@ const Button = styled.button<{$active: boolean}>`
     cursor: ${({ $active }) => ($active ? "pointer" : "not-allowed")};
     transition: 0.2s;
     > p {
+        color: white;
         font-weight: 600;
         font-size: 15px;
     }
@@ -175,14 +174,15 @@ const FileName = styled.div`
     display: flex;
     width: 100%;
     height: 100%;
-    background-color: #414142;
+    background-color: ${({theme}) => theme.inputBackground};
     border-radius: 8px;
     padding: 0px 18px 0px 18px;
     align-items: center;
+    border: 1px solid ${({theme}) => theme.inputBorder};
     gap: 20px;
     > p {
         font-size: 15px;
         font-weight: 400;
-        color: #B8B8B8;
+        color: ${({theme}) => theme.fileName};
     }
 `;

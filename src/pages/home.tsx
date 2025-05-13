@@ -1,10 +1,10 @@
 import styled from "styled-components"
-import { Header } from "../components/header";
 import BackgroundPicture1 from "../assets/img/png/home/1.png";
 import BackgroundPicture2 from "../assets/img/png/home/2.png";
 import BackgroundPicture3 from "../assets/img/png/home/3.png";
 import BackgroundPicture4 from "../assets/img/png/home/4.png";
 import RightArrow from "../assets/img/svg/rightArrow.svg";
+import DarkRightArrow from "../assets/img/svg/darkRightArrow.svg";
 import SmallRightArrow from "../assets/img/svg/smallRightArrow.svg";
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react";
@@ -25,18 +25,17 @@ export const Home = () => {
         BackgroundPicture2,
         BackgroundPicture3,
         BackgroundPicture4
-    ]
+    ] 
 
     return (
         <>
-            <Header />
             <Wrapper>
                 <Background>
                     {BackgroundPictures.map((img, index) => (
                         <BackgroundImage
-                        key={index}
-                        image={img}
-                        isVisible={index === backgroundIndex}
+                            key={index}
+                            image={img}
+                            isVisible={index === backgroundIndex}
                         />
                     ))}
                     <TextWrapper>
@@ -218,7 +217,6 @@ const SmallTextWrapper = styled.div`
 const Text = styled.p`
     font-size: 50px;
     font-weight: 800;
-    color: white;
     z-index: 1;
     background: none;
 `;
@@ -268,6 +266,9 @@ const Button = styled.div`
     padding-right: 30px;
     justify-content: space-between;
     cursor: pointer;
+    > p {
+        color: white;
+    }
 `;
 
 const ContentWrapper = styled.div`
@@ -300,7 +301,7 @@ const DetailButton = styled.div`
     gap: 10px;
     cursor: pointer;
     > p {
-        color: rgba(255,255,255,0.59);
+        color: ${({theme}) => theme.detailText};
         font-weight: 500;
         font-size: 15px;
     }
@@ -315,7 +316,7 @@ const Listwrapper = styled.div`
 
 const Box = styled.div`
     padding: 18px 30px 18px 30px;
-    border: 1px solid white;
+    border: 2px solid ${({theme}) => theme.border};
     border-radius: 10px;
     width: auto;
     justify-content: space-between;

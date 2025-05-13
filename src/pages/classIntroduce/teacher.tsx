@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import { Header } from "../../components/header";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -27,7 +26,6 @@ export const Teacher = () => {
 
     return (
         <>
-            <Header />
             <Wrapper>
                 <Container>
                     <ListWrapper>
@@ -113,6 +111,7 @@ const Circle = styled.div<{ $isSelected: boolean }>`
     height: 90px;
     background-color: #355599;
     font-size: 15px;
+    color: white;
 
     ${({ $isSelected }) =>
         $isSelected &&
@@ -154,8 +153,8 @@ const ContentWrapper = styled.div`
 const ContentBox = styled.div`
     display: flex;
     margin-top: 25px;
-    border-top: 1px solid white;
-    border-bottom: 1px solid white;
+    border-top: 1px solid ${({theme}) => theme.border};
+    border-bottom: 1px solid ${({theme}) => theme.border};
     padding-top: 30px;
     padding-bottom: 30px;
     min-height: 70%;
@@ -174,6 +173,6 @@ const BoxWrapper = styled.div`
 const Box = styled.div`
     padding: 20px 25px 20px 25px;
     border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.5);
+    border: 1px solid ${({theme}) => theme.border};
     margin-top: 30px;
 `;

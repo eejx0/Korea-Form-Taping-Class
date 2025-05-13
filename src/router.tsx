@@ -16,11 +16,15 @@ import { TapingManagerList } from "./pages/tapingManager/list";
 import { TapingManagerDetail } from "./pages/tapingManager/detail";
 import { TapingManagerWrite } from "./pages/tapingManager/write";
 import { ClassAlbumList } from "./pages/classAlbum/list";
+import { ClassAlbumWrite } from "./pages/classAlbum/write";
+import { ClassAlbumDetail } from "./pages/classAlbum/detail";
+import { Header } from "./components/header";
 import { Sns } from "./pages/sns";
 
-function Router () {
+function Router ({isDarkMode, setIsDarkMode}: {isDarkMode: boolean, setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>;}) {
     return (
         <BrowserRouter>
+            <Header isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
             <GlobalStyle />
             <Routes>
                 <Route path="/" element={<Home />}/>
@@ -39,6 +43,8 @@ function Router () {
                 <Route path="/tapingManager/detail" element={<TapingManagerDetail />}/>
                 <Route path="/tapingManager/add" element={<TapingManagerWrite />}/>
                 <Route path="/classAlbum" element={<ClassAlbumList />}/>
+                <Route path="/classAlbum/add" element={<ClassAlbumWrite />}/>
+                <Route path="/classAlbum/detail" element={<ClassAlbumDetail />}/>
                 <Route path="/sns" element={<Sns />}/>
             </Routes>
         </BrowserRouter>

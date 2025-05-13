@@ -1,10 +1,8 @@
 import styled from "styled-components"
-import { Header } from "../../components/header";
 
 export const EducationProcess = () => {
     return (
         <>
-            <Header/>
             <Wrapper>
                 <Container>
                     <p>교육 과정</p>
@@ -103,7 +101,8 @@ const ListWrapper = styled.div`
 
 const ListBox = styled.div`
     padding: 20px 35px 20px 35px;
-    background-color: #414142;
+    background-color: ${({theme}) => theme.inputBackground};
+    border: 1px solid ${({theme}) => theme.inputBorder};
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -116,7 +115,8 @@ const ListBox = styled.div`
 
 const RowListBox = styled.div`
     padding: 20px 35px 20px 35px;
-    background-color: #414142;
+    background-color: ${({theme}) => theme.inputBackground};
+    border: 1px solid ${({theme}) => theme.inputBorder};
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -136,7 +136,7 @@ const List = styled.div`
     background: none;
     > p {
         background: none;
-        color: rgba(255,255,255,0.6);
+        color: ${({theme}) => theme.detailText};
     }
 `;
 

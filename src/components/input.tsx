@@ -30,12 +30,12 @@ const Label = styled.p`
 const InputStyle = styled.input`
     width: 100%;
     height: 45px;
-    background-color: #414142;
+    background-color: ${({theme}) => theme.inputBackground};
+    border: 1px solid ${({theme}) => theme.inputBorder};
     padding: 0px 20px 0px 20px;
     font-size: 15px;
     font-weight: 400;
-    border: none;
     outline: none;
-    color: white;
+    color: ${({theme}) => theme.text};
     border-radius: 12px;
 `;

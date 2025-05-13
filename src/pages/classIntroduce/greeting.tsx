@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import { Header } from "../../components/header";
 import { useState } from "react";
 import Profile from "../../assets/img/svg/profile.svg";
 import { GreetingSection } from "../../components/greetingSection";
@@ -28,7 +27,6 @@ export const Greeting = () => {
     }
     return (
         <>
-            <Header />
             <Wrapper>
                 <Container>
                     <ListWrapper>
@@ -95,6 +93,7 @@ const Circle = styled.div<{ $isSelected: boolean }>`
     height: 90px;
     background-color: #355599;
     font-size: 15px;
+    color: white;
 
     ${({ $isSelected }) =>
         $isSelected &&
@@ -136,8 +135,8 @@ const ContentWrapper = styled.div`
 const ContentBox = styled.div`
     display: flex;
     margin-top: 25px;
-    border-top: 1px solid white;
-    border-bottom: 1px solid white;
+    border-top: 1px solid ${({theme}) => theme.border};
+    border-bottom: 1px solid ${({theme}) => theme.border};
     padding-top: 30px;
     padding-bottom: 30px;
     min-height: fit-content;

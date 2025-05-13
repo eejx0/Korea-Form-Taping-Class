@@ -1,13 +1,26 @@
 import styled from "styled-components"
 import Logo from "../assets/img/svg/KFTC.svg";
+import DarkLogo from "../assets/img/svg/DarkKFTC.svg";
+import Dark from "../assets/img/svg/dark.svg";
+import Light from "../assets/img/svg/light.svg";
 import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 
-export const Header = () => {
+type HeaderProps = {
+    isDarkMode: boolean;
+    setIsDarkMode: React.Dispatch<React.SetStateAction<boolean>>;
+};
+  
+
+export const Header = ({ isDarkMode, setIsDarkMode }: HeaderProps) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const eduRef = useRef<HTMLParagraphElement>(null);
     const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const [dropdownPos, setDropdownPos] = useState({ top: 0, left: 0 });
+
+    const toggleMode = () => {
+        setIsDarkMode((prev) => !prev);
+    }
     
     const calculateDropdownPosition = () => {
         if (eduRef.current) {
@@ -39,23 +52,29 @@ export const Header = () => {
         <Container>
             <Wrapper>
                 <Link to={'/'}>
-                    <LogoImg src={Logo} alt="kFTC" />
+                    <LogoImg src={isDarkMode ? Logo : DarkLogo} alt="KFTC" />
                 </Link>
                 <NavWrapper>
-                    <NavItem to={'/introduce/greeting'}>클래스 소개</NavItem>
-                    <p 
+                    <NavItem $isDarkMode={isDarkMode} to={'/introduce/greeting'}>클래스 소개</NavItem>
+                    <EducationNav
+                        $isDarkMode={isDarkMode}
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
                         ref={eduRef}
                     >
                         교육
-                    </p>
-                    <NavItem to={'/formTaping'}>Form Taping 자료실</NavItem>
-                    <NavItem to={'/tapingManager'}>한국전문테이핑관리사</NavItem>
-                    <NavItem to={'/classAlbum'}>클래스 앨범</NavItem>
-                    <NavItem to={'/sns'}>관련 SNS</NavItem>
+                    </EducationNav>
+                    <NavItem $isDarkMode={isDarkMode} to={'/formTaping'}>Form Taping 자료실</NavItem>
+                    <NavItem $isDarkMode={isDarkMode} to={'/tapingManager'}>한국전문테이핑관리사</NavItem>
+                    <NavItem $isDarkMode={isDarkMode} to={'/classAlbum'}>클래스 앨범</NavItem>
+                    <NavItem $isDarkMode={isDarkMode} to={'/sns'}>관련 SNS</NavItem>
                 </NavWrapper>
-                <GuestCount>오늘 23명이 방문했어요</GuestCount>
+                <RightWrapper>
+                    <GuestCount $isDarkMode={isDarkMode}>오늘 23명이 방문했어요</GuestCount>
+                    <ModeButton $isDarkMode={isDarkMode} onClick={toggleMode}>
+                        <img src={isDarkMode ? Dark : Light} alt={isDarkMode ? Dark : Light}></img>
+                    </ModeButton>
+                </RightWrapper>
             </Wrapper>
             {isOpen && 
                 <DropDownWrapper 
@@ -96,25 +115,32 @@ const LogoImg = styled.img`
     padding-left: 70px;
 `;
 
-const NavItem = styled(Link)`
+const NavItem = styled(Link)<{$isDarkMode: boolean}>`
   font-size: 15px;
   font-weight: 600;
-  color: white;
   cursor: pointer;
   text-decoration: none;
 
   &:hover {
-    color: rgba(255, 255, 255, 0.8);
+    color: ${({$isDarkMode}) => $isDarkMode ? 'rgba(255, 255, 255, 0.8)' : 'rgba(36,36,36,0.5)'};
     transition: 0.2s;
   }
 `;
 
+const RightWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-right: 70px;
+`;
+
 const EducationNavItem = styled(Link)`
     font-size: 13px;
-    color: rgba(255,255,255,0.7);
+    color: ${({theme}) => theme.headerDropDownText};
+    background: none;
     cursor: pointer;
         &:hover {
-            color: white;
+            color: ${({theme}) => theme.text};
         }
 `;
 
@@ -122,22 +148,22 @@ const NavWrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 45px;
-    > p {
-        font-size: 15px;
-        font-weight: 600;
-        cursor: pointer;
-        &:hover {
-            color: rgba(255,255,255, 0.8);
-            transition: 0.2s;
-        }
+`;
+
+const EducationNav = styled.p<{$isDarkMode: boolean}>`
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    &:hover {
+        color: ${({$isDarkMode}) => $isDarkMode ? 'rgba(255, 255, 255, 0.8)' : 'rgba(36,36,36,0.5)'};
+        transition: 0.2s;
     }
 `;
 
-const GuestCount = styled.p`
+const GuestCount = styled.p<{$isDarkMode: boolean}>`
     font-size: 13px;
     font-weight: 500;
-    color: rgba(255,255,255,0.5);
-    padding-right: 70px;
+    color: ${({$isDarkMode}) => ($isDarkMode ? 'rgba(255,255,255,0.5)' : 'rgba(36,36,36,0.5)')};
 `;
 
 const DropDownWrapper = styled.div`
@@ -149,9 +175,9 @@ const DropDownWrapper = styled.div`
     gap: 10px;
     z-index: 10;
     border-radius: 10px;
-    background-color: #242424;
+    background-color: ${({theme}) => theme.background};
     cursor: pointer;
-    border: 1px solid rgba(255,255,255,0.2);
+    border: 1px solid ${({theme}) => theme.headerDropDownBorder};
     > p {
         font-size: 13px;
         color: rgba(255,255,255,0.7);
@@ -164,5 +190,17 @@ const DropDownWrapper = styled.div`
 const Line = styled.div`
     width: 141px;
     height: 1px;
-    background-color: rgba(255,255,255,0.2);
+    background-color: ${({theme}) => theme.headerDropDownBorder};
+`;
+
+const ModeButton = styled.div<{$isDarkMode: boolean}>`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 100px;
+    border: 1px solid ${({$isDarkMode}) => ($isDarkMode ? 'white' : '#242424')};
+    background-color: ${({$isDarkMode}) => ($isDarkMode ? '#242424' : 'white')};
+    cursor: pointer;
 `;

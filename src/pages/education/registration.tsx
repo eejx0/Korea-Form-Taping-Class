@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import { Header } from "../../components/header";
 import { Input } from "../../components/input";
 import { useState } from "react";
 
@@ -31,7 +30,6 @@ export const EducationRegistration = () => {
 
     return (
         <>
-            <Header />
             <Wrapper>
                 <TitleWrapper>
                     <p>교육 등록 및 도서 구매</p>
@@ -177,13 +175,20 @@ const Select = styled.div<{$selected: boolean}>`
     align-items: center;
     width: 100%;
     height: 45px;
-    background-color: #414142;
+    background-color: ${({theme}) => theme.inputBackground};
     padding: 0px 20px 0px 20px;
     font-size: 15px;
     font-weight: 400;
-    border: none;
+    border: 1px solid ${({theme}) => theme.inputBorder};
     outline: none;
-    color: ${({$selected}) => $selected ? '#ffff' : '#686869'};
+    color: ${({ theme, $selected }) => {
+        const isDark = theme.background === '#242424';
+        if (isDark) {
+        return $selected ? '#ffff' : '#686869';
+        } else {
+        return $selected ? '#242424' : '#686869';
+        }
+    }};
     border-radius: 12px;
     cursor: pointer;
 `;
@@ -221,7 +226,8 @@ const OptionList = styled.div`
     margin-top: 10px;
     border-radius: 10px;
     overflow: hidden;
-    background-color: #414142;
+    border: 1px solid ${({theme}) => theme.inputBorder};
+    background-color: ${({theme}) => theme.inputBackground};
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -233,7 +239,7 @@ const OptionList = styled.div`
 const OptionItem = styled.div`
     cursor: pointer;
     font-size: 14px;
-    background-color: #414142;
+    background-color: ${({theme}) => theme.inputBackground};
     width: 100%; 
     border-radius: 8px;
     display: flex;
@@ -243,20 +249,21 @@ const OptionItem = styled.div`
     justify-content: center;
 
     &:hover {
-        background-color: #555555; 
+        background-color: ${({theme}) => theme.hoverBackground}; 
+        color: ${({theme}) => theme.text};
     }
 `;
 
 const Line = styled.div`
     width: 100%;
     height: 1px;
-    background-color: rgba(255,255,255,0.2);
+    background-color: ${({theme}) => theme.headerDropDownBorder};
 `;
 
 const CourseLine = styled.div`
     width: 100%;
     height: 1px;
-    background-color: rgba(255,255,255,0.2);
+    background-color: ${({theme}) => theme.headerDropDownBorder};
     margin-top: 10px;
 `;
 

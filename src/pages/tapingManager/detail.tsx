@@ -1,11 +1,9 @@
 import styled from "styled-components"
-import { Header } from "../../components/header";
 import SaveIcon from "../../assets/img/svg/save.svg";
 
 export const TapingManagerDetail = () => {
     return (
         <>
-            <Header />
             <Wrapper>
                 <TitleWrapper>
                     <p>2025년 경북 김천 5월 11일 KFT-1st class</p>

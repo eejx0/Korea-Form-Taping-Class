@@ -17,10 +17,10 @@ time, mark, audio, video {
   margin: 0;
   padding: 0;
   border: 0;
-  background-color: #242424;
+  background-color: ${({ theme }) => theme.background};
   vertical-align: baseline;
   scroll-behavior: smooth;
-  color: white;
+  color: ${({theme}) => theme.text};
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -83,6 +83,7 @@ a {
 }
 p {
     background: none;
+    color: ${({theme}) => theme.text};
 }
 img {
     background: none;
