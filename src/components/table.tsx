@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface TableProps {
-    data: {date: string; title: string}[];
+    data: {dates: string; title: string; file: string; id: string}[];
 }
 
 export const Table = ({data}: TableProps) => {
@@ -45,7 +45,7 @@ export const Table = ({data}: TableProps) => {
                 <tbody>
                     {currentData.map((item, idx) => (
                         <tr key={idx} onClick={() => navigate(`/education/schedule/id`)}>
-                        <td className="date">{item.date}</td>
+                        <td className="date">{item.dates}</td>
                         <td>{item.title}</td>
                         </tr>
                     ))}

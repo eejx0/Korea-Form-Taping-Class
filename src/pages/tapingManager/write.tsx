@@ -19,7 +19,7 @@ export const TapingManagerWrite = () => {
                 <TitleWrapper>
                     <p>비밀번호를 입력해주세요</p>
                     <SubTitle>운영자만 사용이 가능합니다</SubTitle>
-                </TitleWrapper>
+                </TitleWrapper> 
                 <InputWrapper>
                     <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호를 입력해주세요" type="password"/>
                     <Button 

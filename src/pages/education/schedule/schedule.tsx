@@ -1,13 +1,25 @@
 import styled from "styled-components"
 import { Table } from "../../../components/table";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { GetScheduleListResponse } from "../../../apis/education/type";
+import { getScheduleList } from "../../../apis/education";
 
 export const EducationSchedule = () => {
+    const [listdata, setListData] = useState<GetScheduleListResponse | null>(null);
     const navigate = useNavigate();
-    const dummyData = Array.from({ length: 42 }, (_, i) => ({
-        date: `2025-05-${(i % 30 + 1).toString().padStart(2, '0')}`,
-        title: `샘플 제목 ${i + 1}`
-    }));
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await getScheduleList();
+                setListData(res.data);
+            } catch (error) {
+                console.error('교육 일정 리스트 조회 에러: ', error);
+            }
+        };
+        fetchData();
+    }, [])
 
     return (
         <>
@@ -17,7 +29,9 @@ export const EducationSchedule = () => {
                     <button onClick={() => navigate('/education/schedule/add')}>글쓰기</button>
                 </TitleWrapper>
                 <TableWrapper>
-                    <Table data={dummyData}/>
+                    {listdata && (
+                        <Table data={listdata}/>
+                    )}
                 </TableWrapper>
             </Wrapper>
         </>

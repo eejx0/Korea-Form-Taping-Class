@@ -17,7 +17,7 @@ export const FormTapingList = () => {
                     <button onClick={() => navigate('/formTaping/add')}>글쓰기</button>
                 </TitleWrapper>
                 <TableWrapper>
-                    <Table data={dummyData}/>
+                    {/* <Table data={dummyData}/> */}
                 </TableWrapper>
             </Wrapper>
         </>

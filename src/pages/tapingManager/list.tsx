@@ -20,7 +20,7 @@ export const TapingManagerList = () => {
                     </ButtonWrapper>
                 </TitleWrapper>
                 <TableWrapper>
-                    <Table data={dummyData}/>
+                    {/* <Table data={dummyData}/> */}
                 </TableWrapper>
             </Wrapper>
         </>
