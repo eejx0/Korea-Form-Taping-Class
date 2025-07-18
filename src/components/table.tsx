@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 
 interface TableProps {
     data: {dates: string; title: string; file: string; id: string}[];
+    currentPage: number;
+    onPageChange: (page: number) => void;
 }
 
 export const Table = ({data}: TableProps) => {

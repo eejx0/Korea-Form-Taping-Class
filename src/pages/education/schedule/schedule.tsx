@@ -7,19 +7,20 @@ import { getScheduleList } from "../../../apis/education";
 
 export const EducationSchedule = () => {
     const [listdata, setListData] = useState<GetScheduleListResponse | null>(null);
+    const [page, setPage] = useState<number>(1);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchData = async (pageNumber: number) => {
             try {
-                const res = await getScheduleList();
+                const res = await getScheduleList(pageNumber);
                 setListData(res.data);
             } catch (error) {
                 console.error('교육 일정 리스트 조회 에러: ', error);
             }
         };
-        fetchData();
-    }, [])
+        fetchData(page);
+    }, [page])
 
     return (
         <>
@@ -30,7 +31,7 @@ export const EducationSchedule = () => {
                 </TitleWrapper>
                 <TableWrapper>
                     {listdata && (
-                        <Table data={listdata}/>
+                        <Table currentPage={page} onPageChange={setPage} data={listdata.items}/>
                     )}
                 </TableWrapper>
             </Wrapper>
