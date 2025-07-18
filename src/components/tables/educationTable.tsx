@@ -9,7 +9,7 @@ interface TableProps {
     onPageChange: (page: number) => void;
 }
 
-export const Table = ({data}: TableProps) => {
+export const EducationTable = ({data}: TableProps) => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [listNum, setListNum] = useState<number>(7);
     const navigate = useNavigate();

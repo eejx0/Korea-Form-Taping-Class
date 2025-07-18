@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { Table } from "../../../components/table";
+import { EducationTable } from "../../../components/tables/educationTable";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { GetScheduleListResponse } from "../../../apis/education/type";
@@ -31,7 +31,7 @@ export const EducationSchedule = () => {
                 </TitleWrapper>
                 <TableWrapper>
                     {listdata && (
-                        <Table currentPage={page} onPageChange={setPage} data={listdata.items}/>
+                        <EducationTable currentPage={page} onPageChange={setPage} data={listdata.items}/>
                     )}
                 </TableWrapper>
             </Wrapper>

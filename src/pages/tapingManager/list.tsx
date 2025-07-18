@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { Table } from "../../components/table";
+// import { Table } from "../../components/educationTable";
 import { useNavigate } from "react-router-dom";
 
 export const TapingManagerList = () => {
