@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import { Input } from "../../components/input";
-import { useState } from "react";
+import { getActiveScheduleList } from "../../apis/education";
+import { useEffect, useState } from "react";
 
 export const EducationRegistration = () => {
     const [selectedJob, setSelectedJob] = useState("직종을 선택해주세요");
@@ -11,14 +12,7 @@ export const EducationRegistration = () => {
     const [phone, setPhone] = useState("");
     const [selectedCourse, setSelectedCourse] = useState("교육항목을 선택해주세요");
     const [courseDropdownOpen, setCourseDropdownOpen] = useState(false);
-    const courseOptions = [
-        "2025.05.11 1st Class Non-elastic approach of posture control ta",
-        "스포츠테이핑",
-        "임상가 과정",
-        "학생 기본과정",
-        "심화과정",
-        "온라인 과정",
-    ];
+    const [courseOptions, setCourseOptions] = useState<any[]>([]);
 
     const isFormValid =
         name.trim() !== "" &&
@@ -27,6 +21,18 @@ export const EducationRegistration = () => {
         phone.trim() !== "" &&
         selectedJob !== "직종을 선택해주세요" &&
         selectedCourse !== "교육항목을 선택해주세요";
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await getActiveScheduleList();
+                setCourseOptions(res.data);
+            } catch (error) {
+                console.error("교육 신청 가능 항목 조회 에러: ", error);
+            }
+        };
+        fetchData();
+    }, [])
 
     return (
         <>
@@ -69,7 +75,7 @@ export const EducationRegistration = () => {
                                                 setCourseDropdownOpen(false);
                                             }}
                                         >
-                                            {option}
+                                            {option.title}
                                         </OptionItem>
                                         {index < courseOptions.length - 1 && <CourseLine />}
                                     </div>

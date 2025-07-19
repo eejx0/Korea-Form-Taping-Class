@@ -6,19 +6,69 @@ import RightIcon from "../../../assets/img/svg/blueRightArrow.svg";
 import { ClinicianBox } from "../../../components/paymentAmount/clinicianBox";
 import { StudentBox } from "../../../components/paymentAmount/studentBox";
 import { Message } from "../../../components/message";
-import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { getScheduleDetail } from "../../../apis/education";
+import { GetScheduleResponse } from "../../../apis/education/type";
+import { downloadFile } from "../../../apis";
 
 export const EducationScheduleDetail = () => {
     const [isHovered, setIsHovered] = useState<boolean>(false);
-    const [isFinish, setIsFinish] = useState<boolean>(true);
+    const [isActive, setIsActive] = useState<boolean | null>(null);
+    const [scheduleTitle, setScheduleTitle] = useState<string>("");
+    const [scheduleDetail, setScheduleDetail] = useState<GetScheduleResponse | null>(null);
+    const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
+
+    const handleEditButtonClick = () => {
+        navigate(`/education/schedule/edit/${id}`);
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!id) return;
+            try {
+                const res = await getScheduleDetail(id);
+                const detail = res.data;
+                setScheduleTitle(detail.title);
+                setIsActive(detail.isActive === 'true');
+                setScheduleDetail(detail);
+            } catch (error) {
+                console.error("교육 상세 조회 에러: ", error);
+            }
+        };
+    
+        fetchData();
+    }, [id]);
+
+    const handleSaveClick = async () => {
+        if (!scheduleDetail?.file) {
+            return;
+        }
+    
+        try {
+            const response = await downloadFile(scheduleDetail.file);
+            const blob = new Blob([response.data]);
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = downloadUrl;
+            link.download = scheduleDetail.file;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(downloadUrl);
+        } catch (error) {
+            console.error("파일 다운로드 실패: ", error);
+        }
+    };
 
     return (
         <>
             <Wrapper>
                 <TitleWrapper>
-                    <p>2025년 경북 김천 5월 11일 KFT-1st class</p>
+                    <p>{scheduleTitle}</p>
                     <ButtonWrapper>
-                        <EditButton>
+                        <EditButton onClick={handleEditButtonClick}>
                             <img src={EditIcon} alt="수정" />
                         </EditButton>
                         <SaveButtonWrapper
@@ -30,7 +80,7 @@ export const EducationScheduleDetail = () => {
                                     <Message />
                                 </StyledMessage>
                             )}
-                            <SaveButton>
+                            <SaveButton onClick={handleSaveClick}>
                                 <img src={SaveIcon} alt="저장" />
                             </SaveButton>
                         </SaveButtonWrapper>
@@ -38,7 +88,7 @@ export const EducationScheduleDetail = () => {
                 </TitleWrapper>
                 <Line />
                 <ContentWrapper>
-                    {isFinish ? (
+                    {isActive === false ? (
                         <MessageWrapper>
                             <img src={WarningIcon} alt="알림" />
                             <span>이 교육은 등록이 마감되었습니다.</span>
@@ -50,8 +100,8 @@ export const EducationScheduleDetail = () => {
                         </RegisterButton>
                     )}
                     <PaymentWrapper>
-                        <ClinicianBox />
-                        <StudentBox />
+                        <ClinicianBox doctorFee={scheduleDetail?.doctorFee} doctorSecondFee={scheduleDetail?.doctorSecondFee} doctorAfterFee={scheduleDetail?.doctorAfterFee}/>
+                        <StudentBox studentFee={scheduleDetail?.studentFee} studentSecondFee={scheduleDetail?.studentSecondFee} studentAfterFee={scheduleDetail?.studentAfterFee}/>
                     </PaymentWrapper>
                 </ContentWrapper>
             </Wrapper>

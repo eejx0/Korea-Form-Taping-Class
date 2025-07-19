@@ -1,17 +1,84 @@
 import styled from "styled-components"
 import Arrow from "../../../assets/img/svg/rightArrow.svg";
 import File from "../../../assets/img/svg/file.svg";
+import WarningIcon from "../../../assets/img/svg/warning.svg";
 import { useState } from "react";
+import { checkPassword } from "../../../apis";
+import { Input } from "../../../components/input";
+import { postSchedule } from "../../../apis/education";
 
 export const EducationScheduleWrite = () => {
+    const [form, setForm] = useState({
+        title: '',
+        file: null as File | null,
+        doctorFee: '',        
+        doctorSecondFee: '',
+        doctorAfterFee: '',
+        studentFee: '',
+        studentSecondFee: '',
+        studentAfterFee: '',
+    });    
     const [password, setPassword] = useState<string>('');
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [errorMessage, setErroeMessage] = useState<string>("");
 
-    const isPassword = password === process.env.REACT_APP_PASSWORD;
+    const handleButtonClick = async () => {
+        try {
+            const res = await checkPassword(password);
+            const { result } = res.data;
 
-    const handleButtonClick = () => {
-        setIsOpen(true);
-    }
+            if (result === 'true') {
+                setIsOpen(true);
+                setErroeMessage('');
+            } else {
+                setIsOpen(false);
+                setErroeMessage('비밀번호가 올바르지 않습니다.');
+            }
+        } catch (err) {
+            console.error("비밀번호 확인 실패: ", err);
+        }
+    };
+
+    const handleChange = (key: keyof typeof form, value: any) => {
+        const priceKeys = [
+            "doctorFee", "doctorSecondFee", "doctorAfterFee",
+            "studentFee", "studentSecondFee", "studentAfterFee"
+        ];
+        if (priceKeys.includes(key)) {
+            if (value === '' || /^[0-9]+$/.test(value)) {
+                setForm(prev => ({
+                    ...prev,
+                    [key]: value
+                }));
+            }
+        } else {
+            setForm(prev => ({
+                ...prev,
+                [key]: value
+            }));
+        }
+    };
+
+    const handleSubmit = async () => {
+        console.log(form);
+        try {
+            const formData = new FormData();
+            formData.append("title", form.title);
+            if (form.file) {
+                formData.append("userfile", form.file);
+            }
+            formData.append("doctorFee", form.doctorFee === '' ? '0' : String(Number(form.doctorFee)));
+            formData.append("doctorSecondFee", form.doctorSecondFee === '' ? '0' : String(Number(form.doctorSecondFee)));
+            formData.append("doctorAfterFee", form.doctorAfterFee === '' ? '0' : String(Number(form.doctorAfterFee)));
+            formData.append("studentFee", form.studentFee === '' ? '0' : String(Number(form.studentFee)));
+            formData.append("studentSecondFee", form.studentSecondFee === '' ? '0' : String(Number(form.studentSecondFee)));
+            formData.append("studentAfterFee", form.studentAfterFee === '' ? '0' : String(Number(form.studentAfterFee)));
+      
+            await postSchedule(formData as any);
+        } catch (err) {
+            console.error("업로드 실패: ", err);
+        }
+    };
 
     return (
         <>
@@ -21,10 +88,18 @@ export const EducationScheduleWrite = () => {
                     <SubTitle>운영자만 사용이 가능합니다</SubTitle>
                 </TitleWrapper>
                 <InputWrapper>
-                    <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호를 입력해주세요" type="password"/>
+                    <InputBox>
+                        <TitleInput value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호를 입력해주세요" type="password"/>
+                        {errorMessage && 
+                            <ErrorTextWrapper>
+                                <img src={WarningIcon} alt="" />
+                                <ErrorText>{errorMessage}</ErrorText>
+                            </ErrorTextWrapper>
+                        }
+                    </InputBox>
                     <Button 
-                        disabled={!isPassword}
-                        $active={isPassword}
+                        disabled={password.length === 0}
+                        $active={password.length > 0}
                         onClick={handleButtonClick}
                     >
                         <p>글쓰러 가기</p>
@@ -32,19 +107,52 @@ export const EducationScheduleWrite = () => {
                     </Button>
                 </InputWrapper>
                 {isOpen && (
-                    <ContentWrapper>
-                        <p>교육 일정 글쓰기</p>
-                        <TitleInputWrapper>
-                            <Input placeholder="제목을 입력해주세요"/>
-                            <AddFileWrapper>
-                                <button>파일 선택</button>
-                                <FileName>
-                                    <img src={File} alt="파일명" />
-                                    <p>2025년 경북 김천 5월 11일 KFT-1st class. hwp</p>
-                                </FileName>
-                            </AddFileWrapper>
-                        </TitleInputWrapper>
-                    </ContentWrapper>
+                    <BottomWrapper>
+                        <ContentWrapper>
+                            <ContentTitleWrapper>
+                                <p>교육 일정 글쓰기</p>
+                                <WriteButton onClick={handleSubmit}>작성</WriteButton>
+                            </ContentTitleWrapper>
+                            <TitleInputWrapper>
+                                <TitleInput value={form.title} onChange={(e) => handleChange("title", e.target.value)} placeholder="제목을 입력해주세요"/>
+                                <AddFileWrapper>
+                                    <label htmlFor="fileUpload" style={{ display: "flex" }}>
+                                        <FileButton>파일 선택</FileButton>
+                                    </label>
+
+                                    <input
+                                        type="file"
+                                        id="fileUpload"
+                                        style={{ display: "none" }}
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0] ?? null;
+                                            handleChange("file", file);
+                                        }}
+                                    />
+                                    <FileName>
+                                        <img src={File} alt="파일명" />
+                                        <p>{form.file?.name || "선택된 파일이 없습니다."}</p>
+                                    </FileName>
+                                </AddFileWrapper>
+                            </TitleInputWrapper>
+                        </ContentWrapper>
+                        <PaymentContentWrapper>
+                            <p>가격 설정</p>
+                            <PaymentInputWrapper>
+                                <LeftWrapper>
+                                    <Input value={form.doctorFee} onChange={(e) => handleChange("doctorFee", e.target.value)} placeholder="임상가 가격을 입력하세요" label="임상가 가격"/>
+                                    <Input value={form.doctorSecondFee} onChange={(e) => handleChange("doctorSecondFee", e.target.value)} placeholder="임상가 재수강 가격을 입력하세요" label="임상가 재수강 가격"/>
+                                    <Input value={form.doctorAfterFee} onChange={(e) => handleChange("doctorAfterFee", e.target.value)} placeholder="임상가 3회 이상 재수강 가격을 입력하세요" label="임상가 3회 이상 재수강 가격"/>
+                                </LeftWrapper>
+                                <RightWrapper>
+                                    <Input value={form.studentFee} onChange={(e) => handleChange("studentFee", e.target.value)} placeholder="학생 가격을 입력하세요" label="학생 가격"/>
+                                    <Input value={form.studentSecondFee} onChange={(e) => handleChange("studentSecondFee", e.target.value)} placeholder="학생 재수강 가격을 입력하세요" label="학생 재수강 가격"/>
+                                    <Input value={form.studentAfterFee} onChange={(e) => handleChange("studentAfterFee", e.target.value)} placeholder="학생 3회 이상 재수강 가격을 입력하세요" label="학생 3회 이상 재수강 가격"/>
+                                </RightWrapper>
+                            </PaymentInputWrapper>
+                        </PaymentContentWrapper>
+                    </BottomWrapper>
+                    
                 )}
             </Wrapper>
         </>
@@ -58,6 +166,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     margin-top: 70px;
     gap: 50px;
+    margin-bottom: 100px;
     @media (max-width: 1300px) {
         padding-left: 200px;
         padding-right: 200px;
@@ -90,12 +199,18 @@ const SubTitle = styled.div`
 
 const InputWrapper = styled.div`
     display: flex;
-    align-items: center;
     justify-content: space-between;
     gap: 30px;
 `;
 
-const Input = styled.input`
+const InputBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+`;
+
+const TitleInput = styled.input`
     height: 50px;
     width: 100%;
     border: 1px solid ${({theme}) => theme.inputBorder};
@@ -129,6 +244,12 @@ const Button = styled.button<{$active: boolean}>`
     }
 `;
 
+const BottomWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+`;
+
 const ContentWrapper = styled.div`
     display: flex;
     flex-direction: column;
@@ -139,6 +260,59 @@ const ContentWrapper = styled.div`
         font-size: 30px;
         font-weight: 600;
     }
+`;
+
+const ContentTitleWrapper = styled.div`
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    > p {
+        font-size: 30px;
+        font-weight: 600;
+    }
+`;
+
+const WriteButton = styled.button`
+    padding: 9px 16px;
+    border: 1px solid #588DFF;
+    border-radius: 5px;
+    background-color: #242424;
+    font-size: 15px;
+    color: #588DFF;
+    cursor: pointer;
+`;
+
+const PaymentContentWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    width: 100%;
+    > p {
+        font-size: 30px;
+        font-weight: 600;
+    }
+`;
+
+const PaymentInputWrapper = styled.div`
+    display: flex;
+    width: 100%;
+    gap: 30px;
+    justify-content: space-between;
+    align-items: center;
+`;
+
+const LeftWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
+`;
+
+const RightWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 100%;
 `;
 
 const TitleInputWrapper = styled.div`
@@ -153,20 +327,24 @@ const AddFileWrapper = styled.div`
     align-items: center;
     gap: 35px;
     height: 50px;
-    > button {
-        width: 250px;
-        height: 100%;
-        border-radius: 30px;
-        border: none;
-        background-color: #588DFF;
-        font-size: 15px;
-        font-weight: 600;
-        color: white;
-        cursor: pointer;
-        transition: 0.2s;
-        &:hover {
-            background-color: #355599;
-        }
+`;
+
+const FileButton = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 250px;
+    height: 50px;
+    border-radius: 30px;
+    border: none;
+    background-color: #588DFF;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+    &:hover {
+        background-color: #355599;
     }
 `;
 
@@ -185,4 +363,15 @@ const FileName = styled.div`
         font-weight: 400;
         color: ${({theme}) => theme.fileName};
     }
+`;
+
+const ErrorTextWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+`;
+
+const ErrorText = styled.p`
+    color: #FF5858;
+    font-size: 15px;
 `;

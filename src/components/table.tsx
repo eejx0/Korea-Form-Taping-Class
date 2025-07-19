@@ -1,19 +1,18 @@
 import { useState } from "react";
 import styled from "styled-components"
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 interface TableProps {
     data: {dates: string; title: string; file: string; id: string}[];
     currentPage: number;
     onPageChange: (page: number) => void;
+    onRowClick: (id: string) => void;
 }
 
-export const EducationTable = ({data}: TableProps) => {
+export const Table = ({data, onRowClick}: TableProps) => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [listNum, setListNum] = useState<number>(7);
-    const navigate = useNavigate();
-
+    
     useEffect(() => {
         const handleResize = () => {
             if (window.innerHeight < 740) {
@@ -46,7 +45,7 @@ export const EducationTable = ({data}: TableProps) => {
                 </thead>
                 <tbody>
                     {currentData.map((item, idx) => (
-                        <tr key={idx} onClick={() => navigate(`/education/schedule/id`)}>
+                        <tr key={idx} onClick={() => onRowClick(item.id)}>
                         <td className="date">{item.dates}</td>
                         <td>{item.title}</td>
                         </tr>

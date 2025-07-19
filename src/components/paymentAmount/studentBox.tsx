@@ -3,7 +3,13 @@ import StudentIcon from "../../assets/img/svg/student.svg";
 import ReturnIcon from "../../assets/img/svg/return.svg";
 import ThreeTimeIcon from "../../assets/img/svg/threeTime.svg";
 
-export const StudentBox = () => {
+interface StudentBoxProps {
+    studentFee?: string;
+    studentSecondFee?: string;
+    studentAfterFee?: string;
+}
+
+export const StudentBox = ({studentFee, studentSecondFee, studentAfterFee}: StudentBoxProps) => {
     return (
         <StudentBoxWrapper>
                             <StudentTitleBox>
@@ -16,7 +22,7 @@ export const StudentBox = () => {
                             <StudentContentBox>
                                 <MainProcessWrapper>
                                     <p>정규 과정</p>
-                                    <h3>350,000원</h3>
+                                    <h3>{studentFee}원</h3>
                                 </MainProcessWrapper>
                                 <OthersWrapper>
                                     <CourseWrapper>
@@ -24,14 +30,14 @@ export const StudentBox = () => {
                                             <img src={ReturnIcon} alt="" />
                                             <p>재수강</p>
                                         </CourseTitleWrapper>
-                                        <p>150,000원</p>
+                                        <p>{studentSecondFee}원</p>
                                     </CourseWrapper>
                                     <CourseWrapper>
                                         <CourseTitleWrapper>
                                             <img src={ThreeTimeIcon} alt="" />
                                             <p>3회 이상</p>
                                         </CourseTitleWrapper>
-                                        <p>150,000원</p>
+                                        <p>{studentAfterFee}원</p>
                                     </CourseWrapper>
                                 </OthersWrapper>
                             </StudentContentBox>

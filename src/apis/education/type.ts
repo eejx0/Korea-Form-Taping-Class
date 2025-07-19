@@ -17,3 +17,19 @@ export type GetScheduleListResponse = {
     maxPage: number;
     total: number;
 };
+
+export type GetScheduleDetailResponse = {
+    title: string;
+    file: string;
+    dates: string;
+    id: string;
+}
+
+export type Jobs = 'DOCTOR' | 'STUDENT';
+export type Types = 'DEFAULT' | 'SECOND' | 'MORE';
+
+export type GetEducationFeeRequest = {
+    job: Jobs;
+    id: string;
+    type: Types;
+}

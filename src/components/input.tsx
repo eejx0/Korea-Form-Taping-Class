@@ -3,7 +3,7 @@ import styled from "styled-components"
 interface InputProps {
     label: string;
     placeholder: string;
-    value?: string;
+    value?: string | number;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -20,6 +20,7 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 10px;
+    width: 100%;
 `;
 
 const Label = styled.p`
