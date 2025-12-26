@@ -9,6 +9,7 @@ import { EducationSchedule } from "./pages/education/schedule/schedule";
 import { EducationScheduleDetail } from "./pages/education/schedule/detail";
 import { EducationScheduleWrite } from "./pages/education/schedule/write";
 import { EducationRegistration } from "./pages/education/registration";
+import { EducationScheduleEdit } from "./pages/education/schedule/edit";
 import { FormTapingList } from "./pages/formTaping/list";
 import { FormTapingDetail } from "./pages/formTaping/detail";
 import { FormTapingWrite } from "./pages/formTaping/write";
@@ -33,7 +34,8 @@ function Router ({isDarkMode, setIsDarkMode}: {isDarkMode: boolean, setIsDarkMod
                 <Route path='/introduce/teacher' element={<Teacher />}/>
                 <Route path="/education/process" element={<EducationProcess />}/>
                 <Route path="/education/schedule" element={<EducationSchedule />}/>
-                <Route path="/education/schedule/id" element={<EducationScheduleDetail />}/>
+                <Route path="/education/schedule/:id" element={<EducationScheduleDetail />}/>
+                <Route path="/education/schedule/edit/:id" element={<EducationScheduleEdit />}/>
                 <Route path="/education/schedule/add" element={<EducationScheduleWrite />}/>
                 <Route path="/education/registration" element={<EducationRegistration />}/>
                 <Route path="/formTaping" element={<FormTapingList />}/>

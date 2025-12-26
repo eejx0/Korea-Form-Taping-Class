@@ -2,7 +2,7 @@ import { instance } from './axios';
 
 // 비밀번호 확인
 export const checkPassword = async (pass: string) => {
-  return await instance.get(`/server-api/check-passwd.php?pass=${pass}`);
+  return await instance.get(`/check-passwd.php?pass=${pass}`);
 };
 
 // 파일 다운로드

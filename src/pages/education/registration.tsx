@@ -10,7 +10,7 @@ export const EducationRegistration = () => {
     const [englishName, setEnglishName] = useState("");
     const [affiliation, setAffiliation] = useState("");
     const [phone, setPhone] = useState("");
-    const [selectedCourse, setSelectedCourse] = useState("교육항목을 선택해주세요");
+    const [selectedCourse, setSelectedCourse] = useState<string | { title: string; [key: string]: any }>("교육항목을 선택해주세요");
     const [courseDropdownOpen, setCourseDropdownOpen] = useState(false);
     const [courseOptions, setCourseOptions] = useState<any[]>([]);
 
@@ -63,7 +63,7 @@ export const EducationRegistration = () => {
                         <SelectBox>
                             <Label>교육항목</Label>
                             <Select onClick={() => setCourseDropdownOpen((prev) => !prev)} $selected={selectedCourse !== "교육항목을 선택해주세요"}>
-                                {selectedCourse}
+                                {typeof selectedCourse === 'string' ? selectedCourse : selectedCourse.title}
                             </Select>
                             {courseDropdownOpen && (
                                 <OptionList style={{ width: "100%" }}>
