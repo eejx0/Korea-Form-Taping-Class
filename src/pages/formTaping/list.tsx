@@ -1,13 +1,26 @@
 import styled from "styled-components"
-// import { Table } from "../../components/educationTable";
+import { Table } from "../../components/table";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { getReferenceList } from "../../apis/formTaping";
+import { GetReferenceListResponse } from "../../apis/formTaping/type";
 
 export const FormTapingList = () => {
+    const [listData, setListData] = useState<GetReferenceListResponse | null>(null);
+    const [page, setPage] = useState<number>(0);
     const navigate = useNavigate();
-    const dummyData = Array.from({ length: 42 }, (_, i) => ({
-        date: `2025-05-${(i % 30 + 1).toString().padStart(2, '0')}`,
-        title: `샘플 제목 ${i + 1}`
-    }));
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await getReferenceList(page);
+                setListData(res.data);
+            } catch (error) {
+                console.error('자료실 리스트 조회 에러: ', error);
+            }
+        };
+        fetchData();
+    }, [page]);
 
     return (
         <>
@@ -17,7 +30,14 @@ export const FormTapingList = () => {
                     <button onClick={() => navigate('/formTaping/add')}>글쓰기</button>
                 </TitleWrapper>
                 <TableWrapper>
-                    {/* <Table data={dummyData}/> */}
+                    {listData && (
+                        <Table
+                            currentPage={page}
+                            onPageChange={setPage}
+                            data={listData.items}
+                            onRowClick={(id) => navigate(`/formTaping/${id}`)}
+                        />
+                    )}
                 </TableWrapper>
             </Wrapper>
         </>

@@ -39,7 +39,7 @@ function Router ({isDarkMode, setIsDarkMode}: {isDarkMode: boolean, setIsDarkMod
                 <Route path="/education/schedule/add" element={<EducationScheduleWrite />}/>
                 <Route path="/education/registration" element={<EducationRegistration />}/>
                 <Route path="/formTaping" element={<FormTapingList />}/>
-                <Route path="/formTaping/detail" element={<FormTapingDetail />}/>
+                <Route path="/formTaping/:id" element={<FormTapingDetail />}/>
                 <Route path="/formTaping/add" element={<FormTapingWrite />}/>
                 <Route path="/tapingManager" element={<TapingManagerList />}/>
                 <Route path="/tapingManager/detail" element={<TapingManagerDetail />}/>
