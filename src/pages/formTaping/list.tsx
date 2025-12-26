@@ -27,7 +27,7 @@ export const FormTapingList = () => {
             <Wrapper>
                 <TitleWrapper>
                     <p>Form Taping 자료실</p>
-                    <button onClick={() => navigate('/formTaping/add')}>글쓰기</button>
+                    <button onClick={() => navigate('/main/formTaping/add')}>글쓰기</button>
                 </TitleWrapper>
                 <TableWrapper>
                     {listData && (
@@ -35,7 +35,7 @@ export const FormTapingList = () => {
                             currentPage={page}
                             onPageChange={setPage}
                             data={listData.items}
-                            onRowClick={(id) => navigate(`/formTaping/${id}`)}
+                            onRowClick={(id) => navigate(`/main/formTaping/${id}`)}
                         />
                     )}
                 </TableWrapper>

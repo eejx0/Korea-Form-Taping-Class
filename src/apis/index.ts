@@ -12,3 +12,8 @@ export const downloadFile = async (fileName: string) => {
     responseType: 'blob',
   });
 };
+
+// 방문자 수 조회
+export const getUserCount = async () => {
+  return await instance.get<{ today_visit_count: number }>(`/user-count.php`);
+};

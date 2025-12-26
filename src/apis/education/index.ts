@@ -13,12 +13,12 @@ export const getScheduleDetail = async (id: string) => {
 
 // 교육 일정 수정
 export const putSchedule = async (id: string, isActive: boolean) => {
-    return await instance.put(`/schedule.php`, {id, isActive});
+    return await instance.put<{ result: string }>(`/schedule.php`, {id, isActive});
 }
 
 // 교육 일정 글쓰기
 export const postSchedule = async (formData: FormData) => {
-    return await instance.post('/schedule.php', formData, {
+    return await instance.post<{ result: string }>('/schedule.php', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

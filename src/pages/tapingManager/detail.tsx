@@ -1,16 +1,68 @@
 import styled from "styled-components"
 import SaveIcon from "../../assets/img/svg/save.svg";
+import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { getCertDetail } from "../../apis/tapingManager";
+import { downloadFile } from "../../apis";
+import { GetCertResponse } from "../../apis/tapingManager/type";
 
 export const TapingManagerDetail = () => {
+    const { id } = useParams<{ id: string }>();
+    const [detail, setDetail] = useState<GetCertResponse | null>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!id) return;
+            try {
+                const res = await getCertDetail(id);
+                setDetail(res.data);
+            } catch (error) {
+                console.error('한국전문테이핑관리사 상세 조회 에러: ', error);
+            }
+        };
+        fetchData();
+    }, [id]);
+
+    const handleDownload = async () => {
+        if (!detail?.file) return;
+
+        try {
+            const response = await downloadFile(detail.file);
+            const blob = new Blob([response.data]);
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = downloadUrl;
+            link.download = detail.file;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(downloadUrl);
+        } catch (error) {
+            console.error("파일 다운로드 실패: ", error);
+        }
+    };
+
     return (
         <>
             <Wrapper>
                 <TitleWrapper>
-                    <p>2025년 경북 김천 5월 11일 KFT-1st class</p>
-                    <Button>
+                    <p>{detail?.title || "로딩 중..."}</p>
+                    <Button onClick={handleDownload}>
                         <img src={SaveIcon} alt="저장" />
                     </Button>
                 </TitleWrapper>
+                {detail && (
+                    <InfoWrapper>
+                        <InfoItem>
+                            <span>날짜</span>
+                            <p>{detail.dates}</p>
+                        </InfoItem>
+                        <InfoItem>
+                            <span>파일</span>
+                            <p>{detail.file}</p>
+                        </InfoItem>
+                    </InfoWrapper>
+                )}
             </Wrapper>
         </>
     )
@@ -39,6 +91,7 @@ const Wrapper = styled.div`
 const TitleWrapper = styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
     > p {
         font-size: 30px;
         font-weight: 600;
@@ -58,5 +111,31 @@ const Button = styled.div`
     transition: 0.2s;
     &:hover {
         background-color: #355599;
+    }
+`;
+
+const InfoWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid ${({theme}) => theme.inputBorder};
+`;
+
+const InfoItem = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    > span {
+        font-size: 14px;
+        font-weight: 600;
+        color: ${({theme}) => theme.detailText};
+        width: 50px;
+    }
+    > p {
+        font-size: 15px;
+        font-weight: 500;
     }
 `;

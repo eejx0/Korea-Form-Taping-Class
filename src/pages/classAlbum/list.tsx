@@ -1,70 +1,94 @@
 import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
-import Example from "../../assets/img/svg/example.svg";
+import { getAlbumList, getImageUrl } from "../../apis/classAlbum";
+import { GetAlbumListResponse } from "../../apis/classAlbum/type";
+
+const ITEMS_PER_PAGE = 9;
+const PAGES_PER_GROUP = 10;
 
 export const ClassAlbumList = () => {
-    const dummyData = [
-        Example,
-        Example,
-        Example,
-        Example,
-        Example,
-        Example,
-        Example,
-        Example,
-        Example
-    ]
-
+    const [listData, setListData] = useState<GetAlbumListResponse | null>(null);
+    const [page, setPage] = useState<number>(0);
+    const [pageGroup, setPageGroup] = useState<number>(0);
     const navigate = useNavigate();
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [listNum, setListNum] = useState<number>(6);
 
     useEffect(() => {
-        const handleResize = () => {
-            setListNum(6);
+        const fetchData = async () => {
+            try {
+                const res = await getAlbumList(page);
+                setListData(res.data);
+            } catch (error) {
+                console.error('클래스 앨범 리스트 조회 에러: ', error);
+            }
         };
+        fetchData();
+    }, [page]);
 
-        handleResize(); 
-        window.addEventListener("resize", handleResize);
+    const totalPages = listData ? listData.maxPage + 1 : 0;
+    const currentItems = listData?.items.slice(0, ITEMS_PER_PAGE) || [];
 
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    const totalGroups = Math.ceil(totalPages / PAGES_PER_GROUP);
+    const startPage = pageGroup * PAGES_PER_GROUP;
+    const endPage = Math.min(startPage + PAGES_PER_GROUP, totalPages);
+    const visiblePages = Array.from({ length: endPage - startPage }, (_, i) => startPage + i);
 
-    const totalPages = Math.ceil(dummyData.length / listNum);
-    const currentData = dummyData.slice(
-        (currentPage - 1) * listNum,
-        currentPage * listNum
-    );
+    const handlePrevGroup = () => {
+        if (pageGroup > 0) {
+            setPageGroup(pageGroup - 1);
+            setPage((pageGroup - 1) * PAGES_PER_GROUP);
+        }
+    };
 
-    
+    const handleNextGroup = () => {
+        if (pageGroup < totalGroups - 1) {
+            setPageGroup(pageGroup + 1);
+            setPage((pageGroup + 1) * PAGES_PER_GROUP);
+        }
+    };
+
     return (
         <>
             <Wrapper>
                 <TitleWrapper>
                     <p>클래스 앨범</p>
-                    <button onClick={() => navigate('/classAlbum/add')}>사진 올리기</button>
+                    <button onClick={() => navigate('/main/classAlbum/add')}>사진 올리기</button>
                 </TitleWrapper>
                 <ContentWrapper>
                     <GridWrapper>
-                        {currentData.map((img, idx) => (
-                            <ImgWrapper onClick={() => navigate('/classAlbum/detail')}>
-                                <ImageBox key={idx}>
-                                    <img src={img} alt={`앨범 이미지 ${idx + 1}`} />
+                        {currentItems.map((item, idx) => (
+                            <ImgWrapper key={idx} onClick={() => navigate(`/main/classAlbum/${item.count}`, { state: { title: item.title } })}>
+                                <ImageBox>
+                                    <img src={getImageUrl(`uploads/${item.thumbnail}`)} alt={item.title} />
                                 </ImageBox>
-                                <p>2025년 대한물리치료사협회 울산지부 ...</p>
+                                <p>{item.title.length > 30 ? item.title.slice(0, 30) + '...' : item.title}</p>
                             </ImgWrapper>
                         ))}
                     </GridWrapper>
                     <PaginationWrapper>
-                        {Array.from({ length: totalPages }, (_, idx) => (
-                            <Button
+                        <ArrowButton
+                            onClick={handlePrevGroup}
+                            disabled={pageGroup === 0}
+                            $disabled={pageGroup === 0}
+                        >
+                            &lt;
+                        </ArrowButton>
+                        {visiblePages.map((idx) => (
+                            <PageButton
                                 key={idx}
-                                onClick={() => setCurrentPage(idx + 1)}
+                                $active={page === idx}
+                                onClick={() => setPage(idx)}
                             >
                                 {idx + 1}
-                            </Button>
+                            </PageButton>
                         ))}
+                        <ArrowButton
+                            onClick={handleNextGroup}
+                            disabled={pageGroup >= totalGroups - 1}
+                            $disabled={pageGroup >= totalGroups - 1}
+                        >
+                            &gt;
+                        </ArrowButton>
                     </PaginationWrapper>
                 </ContentWrapper>
             </Wrapper>
@@ -77,8 +101,8 @@ const Wrapper = styled.div`
     padding-left: 270px;
     padding-right: 270px;
     flex-direction: column;
-    margin-top: 70px;
-    height: calc(100vh - 70px - 84px);
+    padding-top: 70px;
+    min-height: calc(100vh - 84px);
     @media (max-width: 1300px) {
         padding-left: 200px;
         padding-right: 200px;
@@ -102,6 +126,7 @@ const ImgWrapper = styled.div`
     > p {
         font-size: 13px;
         font-weight: 500;
+        text-align: center;
     }
 `;
 
@@ -175,23 +200,44 @@ const PaginationWrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 20px;
-    margin-top: auto;
-    margin-bottom: 80px;    
+    margin-top: 60px;
+    margin-bottom: 80px;
 `;
 
-const Button = styled.button`
+const PageButton = styled.button<{ $active?: boolean }>`
     display: flex;
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #355599;
+    background-color: ${({ $active }) => $active ? '#588DFF' : '#355599'};
     align-items: center;
     justify-content: center;
     border: none;
     transition: 0.2s;
     cursor: pointer;
     color: white;
+    font-size: 14px;
     &:hover {
         background-color: #588DFF;
+    }
+`;
+
+const ArrowButton = styled.button<{ $disabled?: boolean }>`
+    display: flex;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: ${({ $disabled }) => $disabled ? '#333' : '#242424'};
+    border: 1px solid ${({ $disabled }) => $disabled ? '#555' : '#588DFF'};
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+    cursor: ${({ $disabled }) => $disabled ? 'not-allowed' : 'pointer'};
+    color: ${({ $disabled }) => $disabled ? '#555' : '#588DFF'};
+    font-size: 18px;
+    font-weight: bold;
+    &:hover {
+        background-color: ${({ $disabled }) => $disabled ? '#333' : '#588DFF'};
+        color: ${({ $disabled }) => $disabled ? '#555' : 'white'};
     }
 `;

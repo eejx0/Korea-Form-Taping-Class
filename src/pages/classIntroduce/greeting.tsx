@@ -13,13 +13,13 @@ export const Greeting = () => {
 
         switch (item) {
             case "인사말":
-                navigate("/introduce/greeting");
+                navigate("/main/introduce/greeting");
                 break;
             case "연혁":
-                navigate("/introduce/history");
+                navigate("/main/introduce/history");
                 break;
             case "강사":
-                navigate("/introduce/teacher");
+                navigate("/main/introduce/teacher");
                 break;
             default:
                 break;

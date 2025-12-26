@@ -59,7 +59,7 @@ export const FormTapingWrite = () => {
             const res = await postReference(formData);
             if (res.data.result === 'true') {
                 alert('글이 등록되었습니다.');
-                navigate('/formTaping');
+                navigate('/main/formTaping');
             } else {
                 alert('글 등록에 실패했습니다.');
             }

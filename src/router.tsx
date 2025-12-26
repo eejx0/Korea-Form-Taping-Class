@@ -28,26 +28,26 @@ function Router ({isDarkMode, setIsDarkMode}: {isDarkMode: boolean, setIsDarkMod
             <Header isDarkMode={isDarkMode} setIsDarkMode={setIsDarkMode} />
             <GlobalStyle />
             <Routes>
-                <Route path="/" element={<Home />}/>
-                <Route path="/introduce/greeting" element={<Greeting />}/>
-                <Route path="/introduce/history" element={<History />}/>
-                <Route path='/introduce/teacher' element={<Teacher />}/>
-                <Route path="/education/process" element={<EducationProcess />}/>
-                <Route path="/education/schedule" element={<EducationSchedule />}/>
-                <Route path="/education/schedule/:id" element={<EducationScheduleDetail />}/>
-                <Route path="/education/schedule/edit/:id" element={<EducationScheduleEdit />}/>
-                <Route path="/education/schedule/add" element={<EducationScheduleWrite />}/>
-                <Route path="/education/registration" element={<EducationRegistration />}/>
-                <Route path="/formTaping" element={<FormTapingList />}/>
-                <Route path="/formTaping/:id" element={<FormTapingDetail />}/>
-                <Route path="/formTaping/add" element={<FormTapingWrite />}/>
-                <Route path="/tapingManager" element={<TapingManagerList />}/>
-                <Route path="/tapingManager/detail" element={<TapingManagerDetail />}/>
-                <Route path="/tapingManager/add" element={<TapingManagerWrite />}/>
-                <Route path="/classAlbum" element={<ClassAlbumList />}/>
-                <Route path="/classAlbum/add" element={<ClassAlbumWrite />}/>
-                <Route path="/classAlbum/detail" element={<ClassAlbumDetail />}/>
-                <Route path="/sns" element={<Sns />}/>
+                <Route path="/main/" element={<Home />}/>
+                <Route path="/main/introduce/greeting" element={<Greeting />}/>
+                <Route path="/main/introduce/history" element={<History />}/>
+                <Route path='/main/introduce/teacher' element={<Teacher />}/>
+                <Route path="/main/education/process" element={<EducationProcess />}/>
+                <Route path="/main/education/schedule" element={<EducationSchedule />}/>
+                <Route path="/main/education/schedule/:id" element={<EducationScheduleDetail />}/>
+                <Route path="/main/education/schedule/edit/:id" element={<EducationScheduleEdit />}/>
+                <Route path="/main/education/schedule/add" element={<EducationScheduleWrite />}/>
+                <Route path="/main/education/registration" element={<EducationRegistration />}/>
+                <Route path="/main/formTaping" element={<FormTapingList />}/>
+                <Route path="/main/formTaping/:id" element={<FormTapingDetail />}/>
+                <Route path="/main/formTaping/add" element={<FormTapingWrite />}/>
+                <Route path="/main/tapingManager" element={<TapingManagerList />}/>
+                <Route path="/main/tapingManager/:id" element={<TapingManagerDetail />}/>
+                <Route path="/main/tapingManager/add" element={<TapingManagerWrite />}/>
+                <Route path="/main/classAlbum" element={<ClassAlbumList />}/>
+                <Route path="/main/classAlbum/add" element={<ClassAlbumWrite />}/>
+                <Route path="/main/classAlbum/:id" element={<ClassAlbumDetail />}/>
+                <Route path="/main/sns" element={<Sns />}/>
             </Routes>
         </BrowserRouter>
     )

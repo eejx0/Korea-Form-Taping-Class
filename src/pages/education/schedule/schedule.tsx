@@ -27,11 +27,11 @@ export const EducationSchedule = () => {
             <Wrapper>
                 <TitleWrapper>
                     <p>교육 일정</p>
-                    <button onClick={() => navigate('/education/schedule/add')}>글쓰기</button>
+                    <button onClick={() => navigate('/main/education/schedule/add')}>글쓰기</button>
                 </TitleWrapper>
                 <TableWrapper>
                     {listdata && (
-                        <Table currentPage={page} onPageChange={setPage} data={listdata.items} onRowClick={(id) => navigate(`/education/schedule/${id}`)}/>
+                        <Table currentPage={page} onPageChange={setPage} data={listdata.items} onRowClick={(id) => navigate(`/main/education/schedule/${id}`)}/>
                     )}
                 </TableWrapper>
             </Wrapper>

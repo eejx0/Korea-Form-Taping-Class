@@ -2,6 +2,7 @@
   "name": "korea-form-taping-class",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://k-formtaping.co.kr/main/",
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",

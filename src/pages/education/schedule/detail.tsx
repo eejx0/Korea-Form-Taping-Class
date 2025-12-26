@@ -21,7 +21,7 @@ export const EducationScheduleDetail = () => {
     const navigate = useNavigate();
 
     const handleEditButtonClick = () => {
-        navigate(`/education/schedule/edit/${id}`);
+        navigate(`/main/education/schedule/edit/${id}`, { state: { isActive: scheduleDetail?.isActive } });
     };
 
     useEffect(() => {
@@ -31,7 +31,7 @@ export const EducationScheduleDetail = () => {
                 const res = await getScheduleDetail(id);
                 const detail = res.data;
                 setScheduleTitle(detail.title);
-                setIsActive(detail.isActive === 'true');
+                setIsActive(detail.isActive === '1');
                 setScheduleDetail(detail);
             } catch (error) {
                 console.error("교육 상세 조회 에러: ", error);
@@ -94,7 +94,7 @@ export const EducationScheduleDetail = () => {
                             <span>이 교육은 등록이 마감되었습니다.</span>
                         </MessageWrapper>
                     ) : (
-                        <RegisterButton>
+                        <RegisterButton onClick={() => navigate('/main/education/registration')}>
                             <p>교육 등록하기</p>
                             <img src={RightIcon} alt="" />
                         </RegisterButton>

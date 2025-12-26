@@ -1,13 +1,26 @@
 import styled from "styled-components"
-// import { Table } from "../../components/educationTable";
+import { Table } from "../../components/table";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { getCertList } from "../../apis/tapingManager";
+import { GetCertListResponse } from "../../apis/tapingManager/type";
 
 export const TapingManagerList = () => {
+    const [listData, setListData] = useState<GetCertListResponse | null>(null);
+    const [page, setPage] = useState<number>(0);
     const navigate = useNavigate();
-    const dummyData = Array.from({ length: 42 }, (_, i) => ({
-        date: `2025-05-${(i % 30 + 1).toString().padStart(2, '0')}`,
-        title: `샘플 제목 ${i + 1}`
-    }));
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await getCertList(page);
+                setListData(res.data);
+            } catch (error) {
+                console.error('한국전문테이핑관리사 리스트 조회 에러: ', error);
+            }
+        };
+        fetchData();
+    }, [page]);
 
     return (
         <>
@@ -16,11 +29,18 @@ export const TapingManagerList = () => {
                     <p>한국전문테이핑관리사 일정</p>
                     <ButtonWrapper>
                         <BlogButton target="_blank" rel="noopener noreferrer" href="https://koreaspecialtapingacademy.tistory.com/">블로그</BlogButton>
-                        <WriteButton onClick={() => navigate('/tapingManager/add')}>글쓰기</WriteButton>
+                        <WriteButton onClick={() => navigate('/main/tapingManager/add')}>글쓰기</WriteButton>
                     </ButtonWrapper>
                 </TitleWrapper>
                 <TableWrapper>
-                    {/* <Table data={dummyData}/> */}
+                    {listData && (
+                        <Table
+                            currentPage={page}
+                            onPageChange={setPage}
+                            data={listData.items}
+                            onRowClick={(id) => navigate(`/main/tapingManager/${id}`)}
+                        />
+                    )}
                 </TableWrapper>
             </Wrapper>
         </>
@@ -88,6 +108,7 @@ const BlogButton = styled.a`
         display: flex;
         align-items: center;
         justify-content: center;
+        text-decoration: none;
 `;
 
 const TableWrapper = styled.div`

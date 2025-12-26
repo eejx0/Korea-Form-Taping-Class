@@ -4,20 +4,48 @@ import BackgroundPicture2 from "../assets/img/png/home/2.png";
 import BackgroundPicture3 from "../assets/img/png/home/3.png";
 import BackgroundPicture4 from "../assets/img/png/home/4.png";
 import RightArrow from "../assets/img/svg/rightArrow.svg";
-import DarkRightArrow from "../assets/img/svg/darkRightArrow.svg";
 import SmallRightArrow from "../assets/img/svg/smallRightArrow.svg";
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { getScheduleList } from "../apis/education";
+import { getCertList } from "../apis/tapingManager";
+import { getReferenceList } from "../apis/formTaping";
+import { GetScheduleResponse } from "../apis/education/type";
+import { CertItem } from "../apis/tapingManager/type";
+import { ReferenceItem } from "../apis/formTaping/type";
 
 export const Home = () => {
     const [backgroundIndex, setBackgroundIndex] = useState<number>(0);
+    const [schedules, setSchedules] = useState<GetScheduleResponse[]>([]);
+    const [certList, setCertList] = useState<CertItem[]>([]);
+    const [referenceList, setReferenceList] = useState<ReferenceItem[]>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const interval = setInterval(() => {
             setBackgroundIndex((prevIndex) => (prevIndex + 1) % BackgroundPictures.length)
         }, 5000);
-        
+
         return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [scheduleRes, certRes, referenceRes] = await Promise.all([
+                    getScheduleList(0),
+                    getCertList(0),
+                    getReferenceList(0)
+                ]);
+                setSchedules(scheduleRes.data.items.slice(0, 3));
+                setCertList(certRes.data.items.slice(0, 4));
+                setReferenceList(referenceRes.data.items.slice(0, 4));
+            } catch (error) {
+                console.error('홈 데이터 조회 에러:', error);
+            }
+        };
+        fetchData();
     }, [])
 
     const BackgroundPictures = [
@@ -58,20 +86,18 @@ export const Home = () => {
                     <IntendedEducationWrapper>
                         <Title>예정된 교육들을 확인하세요</Title>
                         <ListWrapper>
-                            <List>
-                                <p className="color">5월 11일</p>
-                                <p>경북 교육</p>
-                            </List>
-                            <List>
-                                <p className="color">5월 17일</p>
-                                <p>부산 교육</p>
-                            </List>
-                            <List>
-                                <p className="color">5월 25일</p>
-                                <p>서울 교육</p>
-                            </List>
+                            {schedules.length > 0 ? (
+                                schedules.map((schedule) => (
+                                    <List key={schedule.id} onClick={() => navigate(`/main/education/schedule/${schedule.id}`)}>
+                                        <p className="color">{schedule.dates}</p>
+                                        <p>{schedule.title.length > 15 ? schedule.title.slice(0, 15) + '...' : schedule.title}</p>
+                                    </List>
+                                ))
+                            ) : (
+                                <p>예정된 교육이 없습니다.</p>
+                            )}
                         </ListWrapper>
-                        <Button>
+                        <Button onClick={() => navigate('/main/education/schedule')}>
                             <p>신청하러 가기</p>
                             <img src={RightArrow} alt=">" />
                         </Button>
@@ -86,56 +112,44 @@ export const Home = () => {
                     <ContentWrapper>
                         <SuccessfulCandidatesWrapper>
                             <TitleWrapper>
-                                <p className="title">한국전문테이핑관리사 합격자 발표</p>
-                                <DetailButton>
+                                <p className="title">한국전문테이핑관리사</p>
+                                <DetailButton onClick={() => navigate('/main/tapingManager')}>
                                     <p>자세히 보기</p>
                                     <img src={SmallRightArrow} alt=">" />
                                 </DetailButton>
                             </TitleWrapper>
                             <Listwrapper>
-                                <Box>
-                                    <p>제 7회 한국전문테이핑관리사 2급 합격자 발표</p>
-                                    <img src={RightArrow} alt="" />
-                                </Box>
-                                <Box>
-                                    <p>제6회 한국전문테이핑관리사 1급 합격자 발표</p>
-                                    <img src={RightArrow} alt="" />
-                                </Box>
-                                <Box>
-                                    <p>제5회 한국전문테이핑관리사 3급 합격자 발표</p>
-                                    <img src={RightArrow} alt="" />
-                                </Box>
-                                <Box>
-                                    <p>제4회 한국전문테이핑관리사 3급 합격자 발표</p>
-                                    <img src={RightArrow} alt="" />
-                                </Box>
+                                {certList.length > 0 ? (
+                                    certList.map((cert) => (
+                                        <Box key={cert.id} onClick={() => navigate(`/main/tapingManager/${cert.id}`)}>
+                                            <p>{cert.title.length > 30 ? cert.title.slice(0, 30) + '...' : cert.title}</p>
+                                            <img src={RightArrow} alt="" />
+                                        </Box>
+                                    ))
+                                ) : (
+                                    <p>등록된 게시물이 없습니다.</p>
+                                )}
                             </Listwrapper>
                         </SuccessfulCandidatesWrapper>
                         <SuccessfulCandidatesWrapper>
                             <TitleWrapper>
-                                <p className="title">한국전문테이핑 학회</p>
-                                <DetailButton>
+                                <p className="title">Form Taping 자료실</p>
+                                <DetailButton onClick={() => navigate('/main/formTaping')}>
                                     <p>자세히 보기</p>
                                     <img src={SmallRightArrow} alt=">" />
                                 </DetailButton>
                             </TitleWrapper>
                             <Listwrapper>
-                                <Box>
-                                    <p>한국직업능력개발연구원 민간자격등록증-한국전문테이핑관리사</p>
-                                    <img src={RightArrow} alt="" />
-                                </Box>
-                                <Box>
-                                    <p>제6회 한국전문테이핑관리사 자격 검정 시행 11월 29일-30일</p>
-                                    <img src={RightArrow} alt="" />
-                                </Box>
-                                <Box>
-                                    <p>목의 도수교정 금기증와 치료</p>
-                                    <img src={RightArrow} alt="" />
-                                </Box>
-                                <Box>
-                                    <p>SI joint dysfunction taping</p>
-                                    <img src={RightArrow} alt="" />
-                                </Box>
+                                {referenceList.length > 0 ? (
+                                    referenceList.map((ref) => (
+                                        <Box key={ref.id} onClick={() => navigate(`/main/formTaping/${ref.id}`)}>
+                                            <p>{ref.title.length > 30 ? ref.title.slice(0, 30) + '...' : ref.title}</p>
+                                            <img src={RightArrow} alt="" />
+                                        </Box>
+                                    ))
+                                ) : (
+                                    <p>등록된 게시물이 없습니다.</p>
+                                )}
                             </Listwrapper>
                         </SuccessfulCandidatesWrapper>
                     </ContentWrapper>
@@ -159,6 +173,12 @@ const Background = styled.div`
   height: 472px;
   display: flex;
   overflow: hidden;
+  @media (max-width: 768px) {
+    height: 350px;
+  }
+  @media (max-width: 500px) {
+    height: 280px;
+  }
 `;
 
 const BackgroundImage = styled.div<{ image: string; isVisible: boolean }>`
@@ -198,6 +218,11 @@ const TextWrapper = styled.div`
     padding-left: 70px;
     margin-top: auto;
     padding-bottom: 45px;
+    @media (max-width: 768px) {
+        padding-left: 30px;
+        gap: 20px;
+        padding-bottom: 30px;
+    }
 `;
 
 const SmallTextWrapper = styled.div`
@@ -212,6 +237,12 @@ const SmallTextWrapper = styled.div`
     > p {
         background: none;
     }
+    @media (max-width: 768px) {
+        font-size: 20px;
+    }
+    @media (max-width: 500px) {
+        font-size: 16px;
+    }
 `;
 
 const Text = styled.p`
@@ -219,6 +250,12 @@ const Text = styled.p`
     font-weight: 800;
     z-index: 1;
     background: none;
+    @media (max-width: 768px) {
+        font-size: 35px;
+    }
+    @media (max-width: 500px) {
+        font-size: 24px;
+    }
 `;
 
 const IntendedEducationWrapper = styled.div`
@@ -227,11 +264,22 @@ const IntendedEducationWrapper = styled.div`
     margin-top: 100px;
     width: 100%;
     align-items: center;
+    padding: 0 30px;
+    @media (max-width: 768px) {
+        margin-top: 60px;
+    }
 `;
 
 const Title = styled.p`
     font-size: 25px;
     font-weight: 700;
+    text-align: center;
+    @media (max-width: 768px) {
+        font-size: 22px;
+    }
+    @media (max-width: 500px) {
+        font-size: 18px;
+    }
 `;
 
 const ListWrapper = styled.div`
@@ -241,11 +289,27 @@ const ListWrapper = styled.div`
     font-weight: 600;
     font-size: 20px;
     margin-top: 50px;
+    flex-wrap: wrap;
+    justify-content: center;
+    @media (max-width: 900px) {
+        gap: 40px;
+    }
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 20px;
+        margin-top: 30px;
+        font-size: 18px;
+    }
 `;
 
 const List = styled.div`
     display: flex;
     gap: 5px;
+    cursor: pointer;
+    transition: 0.2s;
+    &:hover {
+        opacity: 0.7;
+    }
     .color {
         color: #588DFF;
     }
@@ -269,20 +333,37 @@ const Button = styled.div`
     > p {
         color: white;
     }
+    @media (max-width: 768px) {
+        margin-top: 50px;
+    }
 `;
 
 const ContentWrapper = styled.div`
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     width: 100%;
     gap: 200px;
     margin-top: 100px;
+    padding: 0 30px;
+    @media (max-width: 1200px) {
+        gap: 80px;
+    }
+    @media (max-width: 900px) {
+        flex-direction: column;
+        align-items: center;
+        gap: 60px;
+    }
+    @media (max-width: 768px) {
+        margin-top: 60px;
+    }
 `;
 
 const SuccessfulCandidatesWrapper = styled.div`
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 500px;
 `;
 
 const TitleWrapper = styled.div`
@@ -292,6 +373,20 @@ const TitleWrapper = styled.div`
     .title {
         font-size: 25px;
         font-weight: 700;
+    }
+    @media (max-width: 768px) {
+        gap: 20px;
+        .title {
+            font-size: 20px;
+        }
+    }
+    @media (max-width: 500px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        .title {
+            font-size: 18px;
+        }
     }
 `;
 
@@ -318,13 +413,38 @@ const Box = styled.div`
     padding: 18px 30px 18px 30px;
     border: 2px solid ${({theme}) => theme.border};
     border-radius: 10px;
-    width: auto;
+    width: 100%;
     justify-content: space-between;
     display: flex;
+    align-items: center;
     cursor: pointer;
-    gap: 30px;
+    gap: 20px;
+    transition: 0.2s;
+    &:hover {
+        border-color: #588DFF;
+    }
     > p {
         font-size: 20px;
         font-weight: 600;
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    > img {
+        flex-shrink: 0;
+    }
+    @media (max-width: 768px) {
+        padding: 15px 20px;
+        gap: 15px;
+        > p {
+            font-size: 16px;
+        }
+    }
+    @media (max-width: 500px) {
+        padding: 12px 15px;
+        > p {
+            font-size: 14px;
+        }
     }
 `;

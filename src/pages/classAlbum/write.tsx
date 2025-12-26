@@ -1,17 +1,79 @@
 import styled from "styled-components"
 import Arrow from "../../assets/img/svg/rightArrow.svg";
 import File from "../../assets/img/svg/file.svg";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { checkPassword } from "../../apis";
+import { postAlbum } from "../../apis/classAlbum";
+import WarningIcon from "../../assets/img/svg/warning.svg";
 
 export const ClassAlbumWrite = () => {
     const [password, setPassword] = useState<string>('');
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [title, setTitle] = useState<string>('');
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+    const [errorMessage, setErrorMessage] = useState<string>('');
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
 
-    const isPassword = password === process.env.REACT_APP_PASSWORD;
+    const handlePasswordCheck = async () => {
+        try {
+            const res = await checkPassword(password);
+            const { result } = res.data;
 
-    const handleButtonClick = () => {
-        setIsOpen(true);
-    }
+            if (result === 'true') {
+                setIsOpen(true);
+                setErrorMessage('');
+            } else {
+                setIsOpen(false);
+                setErrorMessage('비밀번호가 올바르지 않습니다.');
+            }
+        } catch (err) {
+            console.error("비밀번호 확인 실패: ", err);
+        }
+    };
+
+    const handleFileSelect = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        if (files) {
+            setSelectedFiles(Array.from(files));
+        }
+    };
+
+    const isFormValid = title.trim() !== '' && selectedFiles.length > 0;
+
+    const handleSubmit = async () => {
+        if (!isFormValid || isSubmitting) return;
+
+        setIsSubmitting(true);
+        try {
+            const formData = new FormData();
+            formData.append('title', title);
+
+            // 모든 파일을 배열로 추가
+            selectedFiles.forEach((file) => {
+                formData.append('userfile[]', file);
+            });
+
+            const res = await postAlbum(formData);
+            if (res.data.result === 'true') {
+                alert('사진이 등록되었습니다.');
+                navigate('/main/classAlbum');
+            } else {
+                alert('사진 등록에 실패했습니다.');
+            }
+        } catch (error) {
+            console.error('사진 등록 에러: ', error);
+            alert('사진 등록 중 오류가 발생했습니다.');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     return (
         <>
@@ -21,11 +83,24 @@ export const ClassAlbumWrite = () => {
                     <SubTitle>운영자만 사용이 가능합니다</SubTitle>
                 </TitleWrapper>
                 <InputWrapper>
-                    <Input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="비밀번호를 입력해주세요" type="password"/>
-                    <Button 
-                        disabled={!isPassword}
-                        $active={isPassword}
-                        onClick={handleButtonClick}
+                    <InputBox>
+                        <Input
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="비밀번호를 입력해주세요"
+                            type="password"
+                        />
+                        {errorMessage &&
+                            <ErrorTextWrapper>
+                                <img src={WarningIcon} alt="" />
+                                <ErrorText>{errorMessage}</ErrorText>
+                            </ErrorTextWrapper>
+                        }
+                    </InputBox>
+                    <Button
+                        disabled={password.length === 0}
+                        $active={password.length > 0}
+                        onClick={handlePasswordCheck}
                     >
                         <p>글쓰러 가기</p>
                         <img src={Arrow} alt="" />
@@ -33,24 +108,45 @@ export const ClassAlbumWrite = () => {
                 </InputWrapper>
                 {isOpen && (
                     <ContentWrapper>
-                        <p>클래스 앨범 사진 올리기</p>
+                        <ContentTitleWrapper>
+                            <p>클래스 앨범 사진 올리기</p>
+                            <WriteButton
+                                $disabled={!isFormValid || isSubmitting}
+                                onClick={handleSubmit}
+                            >
+                                {isSubmitting ? '등록 중...' : '작성'}
+                            </WriteButton>
+                        </ContentTitleWrapper>
                         <TitleInputWrapper>
-                            <Input placeholder="제목을 입력해주세요"/>
+                            <Input
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                placeholder="제목을 입력해주세요"
+                            />
                             <AddFileWrapper>
-                                <button>파일 선택</button>
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    onChange={handleFileChange}
+                                    accept="image/*"
+                                    multiple
+                                    style={{ display: 'none' }}
+                                />
+                                <button onClick={handleFileSelect}>파일 선택</button>
                                 <Files>
-                                    <FileName>
-                                        <img src={File} alt="파일명" />
-                                        <p>2025년 경북 김천 5월 11일 KFT-1st class. hwp</p>
-                                    </FileName>
-                                    <FileName>
-                                        <img src={File} alt="파일명" />
-                                        <p>2025년 경북 김천 5월 11일 KFT-1st class. hwp</p>
-                                    </FileName>
-                                    <FileName>
-                                        <img src={File} alt="파일명" />
-                                        <p>2025년 경북 김천 5월 11일 KFT-1st class. hwp</p>
-                                    </FileName>
+                                    {selectedFiles.length > 0 ? (
+                                        selectedFiles.map((file, idx) => (
+                                            <FileName key={idx}>
+                                                <img src={File} alt="파일명" />
+                                                <p>{file.name}</p>
+                                            </FileName>
+                                        ))
+                                    ) : (
+                                        <FileName>
+                                            <img src={File} alt="파일명" />
+                                            <p>선택된 파일이 없습니다</p>
+                                        </FileName>
+                                    )}
                                 </Files>
                             </AddFileWrapper>
                         </TitleInputWrapper>
@@ -101,9 +197,16 @@ const SubTitle = styled.div`
 
 const InputWrapper = styled.div`
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 30px;
+`;
+
+const InputBox = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
 `;
 
 const Input = styled.input`
@@ -120,6 +223,7 @@ const Input = styled.input`
 
 const Button = styled.button<{$active: boolean}>`
     width: 200px;
+    min-width: 200px;
     height: 50px;
     border-radius: 30px;
     background: ${({ $active }) =>
@@ -146,10 +250,26 @@ const ContentWrapper = styled.div`
     margin-top: 60px;
     width: 100%;
     gap: 50px;
+`;
+
+const ContentTitleWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     > p {
         font-size: 30px;
         font-weight: 600;
     }
+`;
+
+const WriteButton = styled.button<{ $disabled: boolean }>`
+    padding: 9px 16px;
+    border: 1px solid ${({ $disabled }) => $disabled ? '#686869' : '#588DFF'};
+    border-radius: 5px;
+    background-color: transparent;
+    font-size: 15px;
+    color: ${({ $disabled }) => $disabled ? '#686869' : '#588DFF'};
+    cursor: ${({ $disabled }) => $disabled ? 'not-allowed' : 'pointer'};
 `;
 
 const TitleInputWrapper = styled.div`
@@ -166,6 +286,7 @@ const AddFileWrapper = styled.div`
     justify-content: space-between;
     > button {
         width: 250px;
+        min-width: 250px;
         height: 50px;
         border-radius: 30px;
         border: none;
@@ -184,7 +305,7 @@ const AddFileWrapper = styled.div`
 const Files = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 15px;
     width: 100%;
 `;
 
@@ -203,4 +324,15 @@ const FileName = styled.div`
         font-weight: 400;
         color: ${({theme}) => theme.fileName};
     }
+`;
+
+const ErrorTextWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+`;
+
+const ErrorText = styled.p`
+    color: #FF5858;
+    font-size: 15px;
 `;

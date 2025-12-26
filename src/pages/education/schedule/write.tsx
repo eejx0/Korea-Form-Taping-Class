@@ -1,8 +1,9 @@
 import styled from "styled-components"
 import Arrow from "../../../assets/img/svg/rightArrow.svg";
-import File from "../../../assets/img/svg/file.svg";
+import FileIcon from "../../../assets/img/svg/file.svg";
 import WarningIcon from "../../../assets/img/svg/warning.svg";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { checkPassword } from "../../../apis";
 import { Input } from "../../../components/input";
 import { postSchedule } from "../../../apis/education";
@@ -10,17 +11,20 @@ import { postSchedule } from "../../../apis/education";
 export const EducationScheduleWrite = () => {
     const [form, setForm] = useState({
         title: '',
-        file: null as File | null,
-        doctorFee: '',        
+        doctorFee: '',
         doctorSecondFee: '',
         doctorAfterFee: '',
         studentFee: '',
         studentSecondFee: '',
         studentAfterFee: '',
-    });    
+    });
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [password, setPassword] = useState<string>('');
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const [errorMessage, setErroeMessage] = useState<string>("");
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
 
     const handleButtonClick = async () => {
         try {
@@ -39,44 +43,60 @@ export const EducationScheduleWrite = () => {
         }
     };
 
-    const handleChange = (key: keyof typeof form, value: any) => {
+    const handleChange = (key: keyof typeof form, value: string) => {
         const priceKeys = [
             "doctorFee", "doctorSecondFee", "doctorAfterFee",
             "studentFee", "studentSecondFee", "studentAfterFee"
         ];
         if (priceKeys.includes(key)) {
             if (value === '' || /^[0-9]+$/.test(value)) {
-                setForm(prev => ({
-                    ...prev,
-                    [key]: value
-                }));
+                setForm(prev => ({ ...prev, [key]: value }));
             }
         } else {
-            setForm(prev => ({
-                ...prev,
-                [key]: value
-            }));
+            setForm(prev => ({ ...prev, [key]: value }));
+        }
+    };
+
+    const handleFileSelect = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setSelectedFile(file);
         }
     };
 
     const handleSubmit = async () => {
-        console.log(form);
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
         try {
             const formData = new FormData();
             formData.append("title", form.title);
-            if (form.file) {
-                formData.append("userfile", form.file);
+            if (selectedFile) {
+                formData.append("userfile", selectedFile);
             }
-            formData.append("doctorFee", form.doctorFee === '' ? '0' : String(Number(form.doctorFee)));
-            formData.append("doctorSecondFee", form.doctorSecondFee === '' ? '0' : String(Number(form.doctorSecondFee)));
-            formData.append("doctorAfterFee", form.doctorAfterFee === '' ? '0' : String(Number(form.doctorAfterFee)));
-            formData.append("studentFee", form.studentFee === '' ? '0' : String(Number(form.studentFee)));
-            formData.append("studentSecondFee", form.studentSecondFee === '' ? '0' : String(Number(form.studentSecondFee)));
-            formData.append("studentAfterFee", form.studentAfterFee === '' ? '0' : String(Number(form.studentAfterFee)));
-      
-            await postSchedule(formData as any);
+            formData.append("doctorFee", form.doctorFee === '' ? '0' : form.doctorFee);
+            formData.append("doctorSecondFee", form.doctorSecondFee === '' ? '0' : form.doctorSecondFee);
+            formData.append("doctorAfterFee", form.doctorAfterFee === '' ? '0' : form.doctorAfterFee);
+            formData.append("studentFee", form.studentFee === '' ? '0' : form.studentFee);
+            formData.append("studentSecondFee", form.studentSecondFee === '' ? '0' : form.studentSecondFee);
+            formData.append("studentAfterFee", form.studentAfterFee === '' ? '0' : form.studentAfterFee);
+
+            const res = await postSchedule(formData);
+            if (res.data.result === 'true') {
+                alert('교육 일정이 등록되었습니다.');
+                navigate('/main/education/schedule');
+            } else {
+                alert('교육 일정 등록에 실패했습니다.');
+            }
         } catch (err) {
             console.error("업로드 실패: ", err);
+            alert('교육 일정 등록 중 오류가 발생했습니다.');
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -111,27 +131,23 @@ export const EducationScheduleWrite = () => {
                         <ContentWrapper>
                             <ContentTitleWrapper>
                                 <p>교육 일정 글쓰기</p>
-                                <WriteButton onClick={handleSubmit}>작성</WriteButton>
+                                <WriteButton onClick={handleSubmit} disabled={isSubmitting}>
+                                {isSubmitting ? '등록 중...' : '작성'}
+                            </WriteButton>
                             </ContentTitleWrapper>
                             <TitleInputWrapper>
                                 <TitleInput value={form.title} onChange={(e) => handleChange("title", e.target.value)} placeholder="제목을 입력해주세요"/>
                                 <AddFileWrapper>
-                                    <label htmlFor="fileUpload" style={{ display: "flex" }}>
-                                        <FileButton>파일 선택</FileButton>
-                                    </label>
-
                                     <input
                                         type="file"
-                                        id="fileUpload"
-                                        style={{ display: "none" }}
-                                        onChange={(e) => {
-                                            const file = e.target.files?.[0] ?? null;
-                                            handleChange("file", file);
-                                        }}
+                                        ref={fileInputRef}
+                                        onChange={handleFileChange}
+                                        style={{ display: 'none' }}
                                     />
+                                    <FileButton onClick={handleFileSelect}>파일 선택</FileButton>
                                     <FileName>
-                                        <img src={File} alt="파일명" />
-                                        <p>{form.file?.name || "선택된 파일이 없습니다."}</p>
+                                        <img src={FileIcon} alt="파일명" />
+                                        <p>{selectedFile ? selectedFile.name : "선택된 파일이 없습니다."}</p>
                                     </FileName>
                                 </AddFileWrapper>
                             </TitleInputWrapper>
@@ -329,11 +345,12 @@ const AddFileWrapper = styled.div`
     height: 50px;
 `;
 
-const FileButton = styled.div`
+const FileButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
     width: 250px;
+    min-width: 250px;
     height: 50px;
     border-radius: 30px;
     border: none;

@@ -2,9 +2,9 @@ import styled from "styled-components"
 import Arrow from "../../../assets/img/svg/rightArrow.svg";
 import { useState, useEffect } from "react";
 import { checkPassword } from "../../../apis";
-import { putSchedule, getScheduleDetail } from "../../../apis/education";
+import { putSchedule } from "../../../apis/education";
 import WarningIcon from "../../../assets/img/svg/warning.svg";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 
 export const EducationScheduleEdit = () => {
     const [password, setPassword] = useState<string>('');
@@ -13,21 +13,15 @@ export const EducationScheduleEdit = () => {
     const [errorMessage, setErroeMessage] = useState<string>("");
 
     const { id } = useParams<{ id: string }>();
-    
+    const location = useLocation();
+    const navigate = useNavigate();
+
     useEffect(() => {
-        const fetchScheduleDetail = async () => {
-            if (!id) return;
-            try {
-                const res = await getScheduleDetail(id);
-                const { isActive } = res.data;
-                setIsOn(isActive === "1");
-            } catch (err) {
-                console.error("교육 상태 조회 실패: ", err);
-            }
-        };
-    
-        fetchScheduleDetail();
-    }, [id]);
+        const state = location.state as { isActive?: string } | null;
+        if (state?.isActive !== undefined) {
+            setIsOn(state.isActive === "1");
+        }
+    }, [location.state]);
 
     const handleButtonClick = async () => {
         try {
@@ -53,11 +47,18 @@ export const EducationScheduleEdit = () => {
 
     const handleSubmit = async () => {
         if (!id) return;
-      
+
         try {
-          await putSchedule(id, isOn)
+            const res = await putSchedule(id, isOn);
+            if (res.data.result === 'true') {
+                alert('교육 등록 상태가 변경되었습니다.');
+                navigate(`/main/education/schedule/${id}`);
+            } else {
+                alert('상태 변경에 실패했습니다.');
+            }
         } catch (err) {
-          console.error("저장 실패: ", err);
+            console.error("저장 실패: ", err);
+            alert('상태 변경 중 오류가 발생했습니다.');
         }
     };
 

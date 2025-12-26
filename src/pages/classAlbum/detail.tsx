@@ -1,17 +1,46 @@
 import styled from "styled-components"
-import Example from "../../assets/img/svg/example.svg";
-import Example2 from "../../assets/img/svg/example2.svg";
+import { useParams, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { getAlbumDetail, getImageUrl } from "../../apis/classAlbum";
+import { AlbumImage } from "../../apis/classAlbum/type";
 
 export const ClassAlbumDetail = () => {
+    const { id } = useParams<{ id: string }>();
+    const location = useLocation();
+    const [images, setImages] = useState<AlbumImage[]>([]);
+    const title = (location.state as { title?: string })?.title || `앨범 #${id}`;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!id) return;
+            try {
+                const res = await getAlbumDetail(id);
+                setImages(res.data);
+            } catch (error) {
+                console.error('클래스 앨범 상세 조회 에러: ', error);
+            }
+        };
+        fetchData();
+    }, [id]);
+
     return (
         <>
             <Wrapper>
-                <p>2025년 경북 김천 5월 11일 KFT-1st class</p>
+                <p>{title}</p>
                 <ContentWrapper>
                     <Line />
                     <ImagesWrapper>
-                        <img src={Example} alt="" />
-                        <img src={Example2} alt="" />
+                        {images.length > 0 ? (
+                            images.map((img, idx) => (
+                                <img
+                                    key={idx}
+                                    src={getImageUrl(img.image)}
+                                    alt={`앨범 이미지 ${idx + 1}`}
+                                />
+                            ))
+                        ) : (
+                            <p>이미지를 불러오는 중...</p>
+                        )}
                     </ImagesWrapper>
                 </ContentWrapper>
             </Wrapper>
@@ -63,4 +92,12 @@ const ImagesWrapper = styled.div`
     flex-direction: column;
     width: 100%;
     gap: 30px;
+    > img {
+        width: 100%;
+        border-radius: 10px;
+    }
+    > p {
+        text-align: center;
+        color: ${({theme}) => theme.detailText};
+    }
 `;
