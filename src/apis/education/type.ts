@@ -33,3 +33,13 @@ export type GetEducationFeeRequest = {
     id: string;
     type: Types;
 }
+
+export type RegisterRequest = {
+    name: string;
+    engname: string;
+    job: Jobs;
+    spcjob: string;
+    contact: string;
+    lecture: string;
+    cost: number;
+}

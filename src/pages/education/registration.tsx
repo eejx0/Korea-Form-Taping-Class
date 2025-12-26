@@ -1,7 +1,8 @@
 import styled from "styled-components"
 import { Input } from "../../components/input";
-import { getActiveScheduleList } from "../../apis/education";
+import { getActiveScheduleList, getEducationFee, postRegister } from "../../apis/education";
 import { useEffect, useState } from "react";
+import { Types, Jobs } from "../../apis/education/type";
 
 export const EducationRegistration = () => {
     const [selectedJob, setSelectedJob] = useState("직종을 선택해주세요");
@@ -10,9 +11,13 @@ export const EducationRegistration = () => {
     const [englishName, setEnglishName] = useState("");
     const [affiliation, setAffiliation] = useState("");
     const [phone, setPhone] = useState("");
-    const [selectedCourse, setSelectedCourse] = useState<string | { title: string; [key: string]: any }>("교육항목을 선택해주세요");
+    const [selectedCourse, setSelectedCourse] = useState<string | { title: string; id: string; [key: string]: any }>("교육항목을 선택해주세요");
     const [courseDropdownOpen, setCourseDropdownOpen] = useState(false);
     const [courseOptions, setCourseOptions] = useState<any[]>([]);
+    const [selectedType, setSelectedType] = useState<string>("교육타입을 선택해주세요");
+    const [typeDropdownOpen, setTypeDropdownOpen] = useState(false);
+    const [fee, setFee] = useState<string>("0");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const isFormValid =
         name.trim() !== "" &&
@@ -20,7 +25,8 @@ export const EducationRegistration = () => {
         affiliation.trim() !== "" &&
         phone.trim() !== "" &&
         selectedJob !== "직종을 선택해주세요" &&
-        selectedCourse !== "교육항목을 선택해주세요";
+        selectedCourse !== "교육항목을 선택해주세요" &&
+        selectedType !== "교육타입을 선택해주세요";
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,12 +40,95 @@ export const EducationRegistration = () => {
         fetchData();
     }, [])
 
+    // 결제액 조회
+    useEffect(() => {
+        const fetchFee = async () => {
+            if (
+                selectedJob === "직종을 선택해주세요" ||
+                typeof selectedCourse === "string" ||
+                selectedType === "교육타입을 선택해주세요"
+            ) {
+                setFee("0");
+                return;
+            }
+
+            const jobMap: { [key: string]: Jobs } = {
+                "임상가": "DOCTOR",
+                "학생": "STUDENT"
+            };
+            const typeMap: { [key: string]: Types } = {
+                "일반": "DEFAULT",
+                "재수강": "SECOND",
+                "3회 이상 재수강": "MORE"
+            };
+
+            try {
+                const requestData = {
+                    job: jobMap[selectedJob],
+                    id: selectedCourse.id,
+                    type: typeMap[selectedType]
+                };
+                console.log("결제액 조회 요청:", requestData);
+                const res = await getEducationFee(requestData);
+                console.log("결제액 조회 응답:", res.data);
+                setFee(res.data.cost);
+            } catch (error) {
+                console.error("결제액 조회 에러: ", error);
+            }
+        };
+        fetchFee();
+    }, [selectedJob, selectedCourse, selectedType]);
+
+    const handleRegister = async () => {
+        if (!isFormValid || isSubmitting) return;
+        if (typeof selectedCourse === "string") return;
+
+        const jobMap: { [key: string]: Jobs } = {
+            "임상가": "DOCTOR",
+            "학생": "STUDENT"
+        };
+
+        setIsSubmitting(true);
+        try {
+            const res = await postRegister({
+                name,
+                engname: englishName,
+                job: jobMap[selectedJob],
+                spcjob: affiliation,
+                contact: phone,
+                lecture: selectedCourse.id,
+                cost: parseInt(fee)
+            });
+            if (res.data.result === "true") {
+                alert("교육 등록이 완료되었습니다.");
+                // 폼 초기화
+                setName("");
+                setEnglishName("");
+                setAffiliation("");
+                setPhone("");
+                setSelectedJob("직종을 선택해주세요");
+                setSelectedCourse("교육항목을 선택해주세요");
+                setSelectedType("교육타입을 선택해주세요");
+                setFee("0");
+            } else {
+                alert("교육 등록에 실패했습니다.");
+            }
+        } catch (error) {
+            console.error("교육 등록 에러: ", error);
+            alert("교육 등록 중 오류가 발생했습니다.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <>
             <Wrapper>
                 <TitleWrapper>
                     <p>교육 등록 및 도서 구매</p>
-                    <RegisterButton $disabled={!isFormValid}>등록하기</RegisterButton>
+                    <RegisterButton $disabled={!isFormValid || isSubmitting} onClick={handleRegister}>
+                        {isSubmitting ? "등록 중..." : "등록하기"}
+                    </RegisterButton>
                 </TitleWrapper>
                 <ContentWrapper>
                     <Input value={name} onChange={(e) => setName(e.target.value)} label="이름" placeholder="이름을 입력해주세요"/>
@@ -84,10 +173,28 @@ export const EducationRegistration = () => {
                             )}
                         </SelectBox>
                     </SelectWrapper>
+                    <SelectWrapper>
+                        <SelectBox>
+                            <Label>교육타입</Label>
+                            <Select onClick={() => setTypeDropdownOpen((prev) => !prev)} $selected={selectedType !== "교육타입을 선택해주세요"}>
+                                {selectedType}
+                            </Select>
+                            {typeDropdownOpen && (
+                                <OptionList>
+                                    <OptionItem onClick={() => { setSelectedType("일반"); setTypeDropdownOpen(false); }}>일반</OptionItem>
+                                    <Line />
+                                    <OptionItem onClick={() => { setSelectedType("재수강"); setTypeDropdownOpen(false); }}>재수강</OptionItem>
+                                    <Line />
+                                    <OptionItem onClick={() => { setSelectedType("3회 이상 재수강"); setTypeDropdownOpen(false); }}>3회 이상 재수강</OptionItem>
+                                </OptionList>
+                            )}
+                        </SelectBox>
+                        <div style={{ width: '50%' }} />
+                    </SelectWrapper>
                 </ContentWrapper>
                 <PaymentWrapper>
                     <p>결제액</p>
-                    <p className="amount">15,000,000</p>
+                    <p className="amount">{parseInt(fee).toLocaleString()}원</p>
                 </PaymentWrapper>
                 <CreditWayWrapper>
                     <p>결제 방법</p>

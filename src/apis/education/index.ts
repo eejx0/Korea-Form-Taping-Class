@@ -1,5 +1,5 @@
 import { instance } from "../axios";
-import { GetEducationFeeRequest, GetScheduleListResponse, GetScheduleResponse } from "./type";
+import { GetEducationFeeRequest, GetScheduleListResponse, GetScheduleResponse, RegisterRequest } from "./type";
 
 // 교육 일정 리스트 조회
 export const getScheduleList = async (pageNumber: number) => {
@@ -32,6 +32,10 @@ export const getActiveScheduleList = async () => {
 
 // 교육 결제 방법
 export const getEducationFee = async (data: GetEducationFeeRequest) => {
-    return await instance.get(`/check-fee.php`, {data})
+    return await instance.get<{ cost: string }>(`/check-fee.php`, { params: data });
 }
-// response -> cost: '15000'
+
+// 교육 등록
+export const postRegister = async (data: RegisterRequest) => {
+    return await instance.post<{ result: string }>('/register.php', data);
+}
