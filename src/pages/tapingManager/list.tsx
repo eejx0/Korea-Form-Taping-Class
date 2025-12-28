@@ -28,7 +28,6 @@ export const TapingManagerList = () => {
                 <TitleWrapper>
                     <p>한국전문테이핑관리사 일정</p>
                     <ButtonWrapper>
-                        <BlogButton target="_blank" rel="noopener noreferrer" href="https://koreaspecialtapingacademy.tistory.com/">블로그</BlogButton>
                         <WriteButton onClick={() => navigate('/main/tapingManager/add')}>글쓰기</WriteButton>
                     </ButtonWrapper>
                 </TitleWrapper>

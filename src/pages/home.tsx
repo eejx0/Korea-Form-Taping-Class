@@ -11,7 +11,7 @@ import SmallRightArrow from "../assets/img/svg/smallRightArrow.svg";
 import { motion } from "framer-motion"
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getScheduleList } from "../apis/education";
+import { getActiveScheduleList } from "../apis/education";
 import { getCertList } from "../apis/tapingManager";
 import { getReferenceList } from "../apis/formTaping";
 import { GetScheduleResponse } from "../apis/education/type";
@@ -37,14 +37,11 @@ export const Home = () => {
         const fetchData = async () => {
             try {
                 const [scheduleRes, certRes, referenceRes] = await Promise.all([
-                    getScheduleList(0),
+                    getActiveScheduleList(),
                     getCertList(0),
                     getReferenceList(0)
                 ]);
-                const activeSchedules = scheduleRes.data.items.filter(
-                    (schedule) => schedule.isActive === "1"
-                );
-                setSchedules(activeSchedules);
+                setSchedules(scheduleRes.data.items || scheduleRes.data);
                 setCertList(certRes.data.items.slice(0, 4));
                 setReferenceList(referenceRes.data.items.slice(0, 4));
             } catch (error) {
