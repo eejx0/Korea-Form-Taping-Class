@@ -1,8 +1,11 @@
 import styled from "styled-components"
-import BackgroundPicture1 from "../assets/img/png/home/1.png";
-import BackgroundPicture2 from "../assets/img/png/home/2.png";
-import BackgroundPicture3 from "../assets/img/png/home/3.png";
-import BackgroundPicture4 from "../assets/img/png/home/4.png";
+import BackgroundPicture1 from "../assets/img/png/home/1.jpeg";
+import BackgroundPicture2 from "../assets/img/png/home/2.jpeg";
+import BackgroundPicture3 from "../assets/img/png/home/3.jpeg";
+import BackgroundPicture4 from "../assets/img/png/home/4.jpeg";
+import BackgroundPicture5 from "../assets/img/png/home/5.jpeg";
+import BackgroundPicture6 from "../assets/img/png/home/6.jpeg";
+import BackgroundPicture7 from "../assets/img/png/home/7.jpeg";
 import RightArrow from "../assets/img/svg/rightArrow.svg";
 import SmallRightArrow from "../assets/img/svg/smallRightArrow.svg";
 import { motion } from "framer-motion"
@@ -38,7 +41,10 @@ export const Home = () => {
                     getCertList(0),
                     getReferenceList(0)
                 ]);
-                setSchedules(scheduleRes.data.items.slice(0, 3));
+                const activeSchedules = scheduleRes.data.items.filter(
+                    (schedule) => schedule.isActive === "1"
+                );
+                setSchedules(activeSchedules);
                 setCertList(certRes.data.items.slice(0, 4));
                 setReferenceList(referenceRes.data.items.slice(0, 4));
             } catch (error) {
@@ -52,7 +58,10 @@ export const Home = () => {
         BackgroundPicture1,
         BackgroundPicture2,
         BackgroundPicture3,
-        BackgroundPicture4
+        BackgroundPicture4,
+        BackgroundPicture5,
+        BackgroundPicture6,
+        BackgroundPicture7
     ] 
 
     return (
@@ -94,7 +103,7 @@ export const Home = () => {
                                     </List>
                                 ))
                             ) : (
-                                <p>예정된 교육이 없습니다.</p>
+                                <EmptyText>예정된 교육이 없습니다.</EmptyText>
                             )}
                         </ListWrapper>
                         <Button onClick={() => navigate('/main/education/schedule')}>
@@ -313,6 +322,10 @@ const List = styled.div`
     .color {
         color: #588DFF;
     }
+`;
+
+const EmptyText = styled.p`
+    color: rgba(255, 255, 255, 0.5);
 `;
 
 const Button = styled.div`

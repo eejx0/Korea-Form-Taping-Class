@@ -66,10 +66,10 @@ export const Sns = () => {
                             <p>일본 스파이랄 테이핑 협회</p>
                         </TextWrapper>
                     </SnsWrapper>
-                    <SnsWrapper target="_blank" rel="noopener noreferrer" href="https://uni.dongseo.ac.kr/sports/">
+                    <SnsWrapper target="_blank" rel="noopener noreferrer" href="https://healernote.co.kr/">
                         <img className="icon" src={Internet} alt="site" />
                         <TextWrapper>
-                            <p>동서대스포츠과학계체육학과</p>
+                            <p>힐러노트</p>
                         </TextWrapper>
                     </SnsWrapper>
                 </ContentWrapper>
