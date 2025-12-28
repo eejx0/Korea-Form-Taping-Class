@@ -33,6 +33,7 @@ export const FormTapingList = () => {
                     {listData && (
                         <Table
                             currentPage={page}
+                            maxPage={listData.maxPage}
                             onPageChange={setPage}
                             data={listData.items}
                             onRowClick={(id) => navigate(`/main/formTaping/${id}`)}

@@ -7,7 +7,7 @@ import { getScheduleList } from "../../../apis/education";
 
 export const EducationSchedule = () => {
     const [listdata, setListData] = useState<GetScheduleListResponse | null>(null);
-    const [page, setPage] = useState<number>(1);
+    const [page, setPage] = useState<number>(0);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -31,7 +31,7 @@ export const EducationSchedule = () => {
                 </TitleWrapper>
                 <TableWrapper>
                     {listdata && (
-                        <Table currentPage={page} onPageChange={setPage} data={listdata.items} onRowClick={(id) => navigate(`/main/education/schedule/${id}`)}/>
+                        <Table currentPage={page} maxPage={listdata.maxPage} onPageChange={setPage} data={listdata.items} onRowClick={(id) => navigate(`/main/education/schedule/${id}`)}/>
                     )}
                 </TableWrapper>
             </Wrapper>

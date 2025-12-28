@@ -1,38 +1,38 @@
 import { useState } from "react";
 import styled from "styled-components"
-import { useEffect } from "react";
+
+const PAGES_PER_GROUP = 10;
 
 interface TableProps {
     data: {dates: string; title: string; file: string; id: string}[];
     currentPage: number;
+    maxPage: number;
     onPageChange: (page: number) => void;
     onRowClick: (id: string) => void;
 }
 
-export const Table = ({data, onRowClick}: TableProps) => {
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [listNum, setListNum] = useState<number>(7);
-    
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerHeight < 740) {
-                setListNum(7);
-            } else if (window.innerHeight < 920){
-                setListNum(10);
-            }
-        };
+export const Table = ({data, currentPage, maxPage, onPageChange, onRowClick}: TableProps) => {
+    const [pageGroup, setPageGroup] = useState<number>(0);
 
-        handleResize(); 
-        window.addEventListener("resize", handleResize);
+    const totalPages = maxPage + 1;
+    const totalGroups = Math.ceil(totalPages / PAGES_PER_GROUP);
+    const startPage = pageGroup * PAGES_PER_GROUP;
+    const endPage = Math.min(startPage + PAGES_PER_GROUP, totalPages);
+    const visiblePages = Array.from({ length: endPage - startPage }, (_, i) => startPage + i);
 
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
+    const handlePrevGroup = () => {
+        if (pageGroup > 0) {
+            setPageGroup(pageGroup - 1);
+            onPageChange((pageGroup - 1) * PAGES_PER_GROUP);
+        }
+    };
 
-    const totalPages = Math.ceil(data.length / listNum);
-    const currentData = data.slice(
-        (currentPage - 1) * listNum,
-        currentPage * listNum
-    );
+    const handleNextGroup = () => {
+        if (pageGroup < totalGroups - 1) {
+            setPageGroup(pageGroup + 1);
+            onPageChange((pageGroup + 1) * PAGES_PER_GROUP);
+        }
+    };
 
     return (
         <TableWrapper>
@@ -44,7 +44,7 @@ export const Table = ({data, onRowClick}: TableProps) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentData.map((item, idx) => (
+                    {data.map((item, idx) => (
                         <tr key={idx} onClick={() => onRowClick(item.id)}>
                         <td className="date">{item.dates}</td>
                         <td>{item.title}</td>
@@ -53,17 +53,32 @@ export const Table = ({data, onRowClick}: TableProps) => {
                 </tbody>
             </Wrapper>
             <PaginationWrapper>
-                {Array.from({ length: totalPages }, (_, idx) => (
-                    <Button
+                <ArrowButton
+                    onClick={handlePrevGroup}
+                    disabled={pageGroup === 0}
+                    $disabled={pageGroup === 0}
+                >
+                    &lt;
+                </ArrowButton>
+                {visiblePages.map((idx) => (
+                    <PageButton
                         key={idx}
-                        onClick={() => setCurrentPage(idx + 1)}
+                        $active={currentPage === idx}
+                        onClick={() => onPageChange(idx)}
                     >
                         {idx + 1}
-                    </Button>
+                    </PageButton>
                 ))}
+                <ArrowButton
+                    onClick={handleNextGroup}
+                    disabled={pageGroup >= totalGroups - 1}
+                    $disabled={pageGroup >= totalGroups - 1}
+                >
+                    &gt;
+                </ArrowButton>
             </PaginationWrapper>
         </TableWrapper>
-        
+
     )
 }
 
@@ -117,23 +132,44 @@ const PaginationWrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 20px;
-    margin-top: auto;
-    margin-bottom: 80px;    
+    margin-top: 60px;
+    margin-bottom: 80px;
 `;
 
-const Button = styled.button`
+const PageButton = styled.button<{ $active?: boolean }>`
     display: flex;
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #355599;
+    background-color: ${({ $active }) => $active ? '#588DFF' : '#355599'};
     align-items: center;
     justify-content: center;
     border: none;
     transition: 0.2s;
     cursor: pointer;
     color: white;
+    font-size: 14px;
     &:hover {
         background-color: #588DFF;
+    }
+`;
+
+const ArrowButton = styled.button<{ $disabled?: boolean }>`
+    display: flex;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: ${({ $disabled }) => $disabled ? '#333' : '#242424'};
+    border: 1px solid ${({ $disabled }) => $disabled ? '#555' : '#588DFF'};
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+    cursor: ${({ $disabled }) => $disabled ? 'not-allowed' : 'pointer'};
+    color: ${({ $disabled }) => $disabled ? '#555' : '#588DFF'};
+    font-size: 18px;
+    font-weight: bold;
+    &:hover {
+        background-color: ${({ $disabled }) => $disabled ? '#333' : '#588DFF'};
+        color: ${({ $disabled }) => $disabled ? '#555' : 'white'};
     }
 `;
