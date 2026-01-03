@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import PopupImage from "../assets/img/png/popup/image.png";
 
-const STORAGE_KEY_FOREVER = "popup_hide_forever";
-const STORAGE_KEY_UNTIL = "popup_hide_until";
+const STORAGE_KEY_FOREVER = "popup_hide_forever_v2";
+const STORAGE_KEY_UNTIL = "popup_hide_until_v2";
 
 export const Popup = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
