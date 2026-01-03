@@ -55,9 +55,9 @@ export const Popup = () => {
                     <OptionButton onClick={handleHideForOneDay}>
                         1일간 닫기
                     </OptionButton>
-                    <OptionButton onClick={handleHideForever}>
+                    {/* <OptionButton onClick={handleHideForever}>
                         다음부터 보지 않기
-                    </OptionButton>
+                    </OptionButton> */}
                 </ButtonWrapper>
             </PopupContainer>
         </Overlay>
@@ -137,9 +137,9 @@ const OptionButton = styled.button`
     cursor: pointer;
     transition: background-color 0.2s;
 
-    &:first-child {
-        border-right: 1px solid ${({ theme }) => theme.border};
-    }
+    // &:first-child {
+    //     border-right: 1px solid ${({ theme }) => theme.border};
+    // }
 
     &:hover {
         background-color: rgba(88, 141, 255, 0.1);
