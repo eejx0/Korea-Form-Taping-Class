@@ -33,6 +33,7 @@ footer, header, hgroup, main, menu, nav, section {
 }
 body {
   line-height: 1;
+  // min-width: 1100px;
 }
 menu, ol, ul {
   list-style: none;

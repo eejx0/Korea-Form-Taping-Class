@@ -248,9 +248,15 @@ const RegisterButton = styled.button<{ $disabled: boolean }>`
 const TitleWrapper = styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
     > p {
         font-weight: 600;
         font-size: 30px;
+    }
+    @media (max-width: 768px) {
+        > p {
+            font-size: 22px;
+        }
     }
 `;
 
@@ -260,6 +266,10 @@ const ContentWrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 20px;
+    @media (max-width: 768px) {
+        margin-top: 30px;
+        gap: 15px;
+    }
 `;
 
 const SelectWrapper = styled.div`
@@ -268,6 +278,10 @@ const SelectWrapper = styled.div`
     justify-content: space-between;
     gap: 30px;
     width: 100%;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 15px;
+    }
 `;
 
 const SelectBox = styled.div`
@@ -276,6 +290,9 @@ const SelectBox = styled.div`
     flex-direction: column;
     gap: 10px;
     position: relative;
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 `;
 
 const Label = styled.p`
@@ -315,6 +332,13 @@ const CreditWayWrapper = styled.div`
         font-size: 30px;
         font-weight: 600;
     }
+    @media (max-width: 768px) {
+        margin-top: 60px;
+        margin-bottom: 60px;
+        > p {
+            font-size: 22px;
+        }
+    }
 `;
 
 const CreditWay = styled.div`
@@ -323,12 +347,20 @@ const CreditWay = styled.div`
     margin-top: 35px;
     font-size: 20px;
     font-weight: 500;
+    @media (max-width: 768px) {
+        margin-top: 20px;
+        font-size: 14px;
+        line-height: 1.6;
+    }
 `;
 
 const HighLight = styled.span`
     font-size: 20px;
     font-weight: 500;
     color: #588DFF;
+    @media (max-width: 768px) {
+        font-size: 14px;
+    }
 `;
 
 const OptionList = styled.div`
@@ -391,5 +423,12 @@ const PaymentWrapper = styled.div`
     .amount {
         font-size: 20px;
         font-weight: 500;
+    }
+    @media (max-width: 768px) {
+        margin-top: 60px;
+        font-size: 22px;
+        .amount {
+            font-size: 18px;
+        }
     }
 `;

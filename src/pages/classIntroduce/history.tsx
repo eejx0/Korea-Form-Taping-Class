@@ -68,6 +68,11 @@ const Wrapper = styled.div`
         padding-left: 30px;
         padding-right: 30px;
     }
+    @media (max-width: 768px) {
+        height: auto;
+        min-height: calc(100vh - 60px);
+        padding-bottom: 40px;
+    }
 `;
 
 const Container = styled.div`
@@ -76,6 +81,11 @@ const Container = styled.div`
     gap: 100px;
     margin-top: 70px;
     height: 100%;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 30px;
+        margin-top: 40px;
+    }
 `;
 
 const ListWrapper = styled.div`
@@ -83,6 +93,11 @@ const ListWrapper = styled.div`
     flex-direction: column;
     gap: 35px;
     align-items: center;
+    @media (max-width: 768px) {
+        flex-direction: row;
+        justify-content: center;
+        gap: 20px;
+    }
 `;
 
 const Circle = styled.div<{ $isSelected: boolean }>`
@@ -115,6 +130,24 @@ const Circle = styled.div<{ $isSelected: boolean }>`
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s;
+
+    @media (max-width: 768px) {
+        width: 70px;
+        height: 70px;
+        font-size: 13px;
+        ${({ $isSelected }) =>
+            $isSelected &&
+            `
+            width: 80px;
+            height: 80px;
+            font-size: 15px;
+        `}
+        &:hover {
+            width: 80px;
+            height: 80px;
+            font-size: 15px;
+        }
+    }
 `;
 
 const ContentWrapper = styled.div`
@@ -127,6 +160,12 @@ const ContentWrapper = styled.div`
         font-size: 25px;
         font-weight: 600;
     }
+    @media (max-width: 768px) {
+        margin-top: 0;
+        > p {
+            font-size: 20px;
+        }
+    }
 `;
 
 const ContentBox = styled.div`
@@ -137,4 +176,10 @@ const ContentBox = styled.div`
     padding-top: 30px;
     padding-bottom: 30px;
     min-height: 70%;
+    @media (max-width: 768px) {
+        min-height: auto;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        font-size: 14px;
+    }
 `;

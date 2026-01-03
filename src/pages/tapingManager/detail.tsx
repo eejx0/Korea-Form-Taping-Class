@@ -74,6 +74,7 @@ const Wrapper = styled.div`
     padding-right: 270px;
     flex-direction: column;
     margin-top: 70px;
+    margin-bottom: 80px;
     @media (max-width: 1300px) {
         padding-left: 200px;
         padding-right: 200px;
@@ -86,15 +87,25 @@ const Wrapper = styled.div`
         padding-left: 30px;
         padding-right: 30px;
     }
+    @media (max-width: 768px) {
+        margin-top: 40px;
+        margin-bottom: 60px;
+    }
 `;
 
 const TitleWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 15px;
     > p {
         font-size: 30px;
         font-weight: 600;
+    }
+    @media (max-width: 768px) {
+        > p {
+            font-size: 20px;
+        }
     }
 `;
 
@@ -109,8 +120,13 @@ const Button = styled.div`
     background-color: #588DFF;
     cursor: pointer;
     transition: 0.2s;
+    flex-shrink: 0;
     &:hover {
         background-color: #355599;
+    }
+    @media (max-width: 768px) {
+        width: 40px;
+        height: 40px;
     }
 `;
 
@@ -122,6 +138,11 @@ const InfoWrapper = styled.div`
     padding: 20px;
     border-radius: 12px;
     border: 1px solid ${({theme}) => theme.inputBorder};
+    @media (max-width: 768px) {
+        margin-top: 20px;
+        padding: 15px;
+        gap: 10px;
+    }
 `;
 
 const InfoItem = styled.div`
@@ -137,5 +158,15 @@ const InfoItem = styled.div`
     > p {
         font-size: 15px;
         font-weight: 500;
+        word-break: break-all;
+    }
+    @media (max-width: 768px) {
+        gap: 15px;
+        > span {
+            font-size: 13px;
+        }
+        > p {
+            font-size: 14px;
+        }
     }
 `;

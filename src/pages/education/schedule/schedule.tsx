@@ -58,11 +58,17 @@ const Wrapper = styled.div`
         padding-left: 30px;
         padding-right: 30px;
     }
+    @media (max-width: 768px) {
+        margin-top: 40px;
+        height: auto;
+        min-height: calc(100vh - 60px);
+    }
 `;
 
 const TitleWrapper = styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
     > p {
         font-weight: 600;
         font-size: 30px;
@@ -78,9 +84,22 @@ const TitleWrapper = styled.div`
         border: none;
         cursor: pointer;
     }
+    @media (max-width: 768px) {
+        > p {
+            font-size: 22px;
+        }
+        > button {
+            width: 80px;
+            height: 35px;
+            font-size: 13px;
+        }
+    }
 `;
 
 const TableWrapper = styled.div`
     margin-top: 45px;
     height: 100%;
+    @media (max-width: 768px) {
+        margin-top: 30px;
+    }
 `;

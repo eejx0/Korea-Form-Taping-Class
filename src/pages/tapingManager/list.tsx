@@ -66,14 +66,26 @@ const Wrapper = styled.div`
         padding-left: 30px;
         padding-right: 30px;
     }
+    @media (max-width: 768px) {
+        margin-top: 40px;
+        height: auto;
+        min-height: calc(100vh - 60px);
+    }
 `;
 
 const TitleWrapper = styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    gap: 15px;
     > p {
         font-weight: 600;
         font-size: 30px;
+    }
+    @media (max-width: 768px) {
+        > p {
+            font-size: 20px;
+        }
     }
 `;
 
@@ -81,37 +93,53 @@ const ButtonWrapper =  styled.div`
     display: flex;
     align-items: center;
     gap: 20px;
+    @media (max-width: 768px) {
+        gap: 10px;
+    }
 `;
 
 const WriteButton = styled.button`
-width: 95px;
-        height: 40px;
-        border-radius: 10px;
-        background: linear-gradient(90deg, #588DFF, #355599);
-        font-size: 15px;
-        font-weight: 600;
-        color: white;
-        border: none;
-        cursor: pointer;
+    width: 95px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #588DFF, #355599);
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    border: none;
+    cursor: pointer;
+    @media (max-width: 768px) {
+        width: 70px;
+        height: 35px;
+        font-size: 13px;
+    }
 `;
 
 const BlogButton = styled.a`
     width: 95px;
     height: 40px;
-        border-radius: 10px;
-        background: linear-gradient(90deg, #45f95d, #329F40);
-        font-size: 15px;
-        font-weight: 600;
-        color: white;
-        border: none;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-decoration: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #45f95d, #329F40);
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    @media (max-width: 768px) {
+        width: 70px;
+        height: 35px;
+        font-size: 13px;
+    }
 `;
 
 const TableWrapper = styled.div`
     margin-top: 45px;
     height: 100%;
+    @media (max-width: 768px) {
+        margin-top: 30px;
+    }
 `;

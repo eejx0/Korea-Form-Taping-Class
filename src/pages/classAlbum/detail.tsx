@@ -71,6 +71,13 @@ const Wrapper = styled.div`
         font-size: 30px;
         font-weight: 600;
     }
+    @media (max-width: 768px) {
+        margin-top: 40px;
+        margin-bottom: 60px;
+        > p {
+            font-size: 22px;
+        }
+    }
 `;
 
 const ContentWrapper = styled.div`

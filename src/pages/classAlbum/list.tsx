@@ -115,6 +115,10 @@ const Wrapper = styled.div`
         padding-left: 30px;
         padding-right: 30px;
     }
+    @media (max-width: 768px) {
+        padding-top: 40px;
+        min-height: calc(100vh - 60px);
+    }
 `;
 
 const ImgWrapper = styled.div`
@@ -153,6 +157,7 @@ const ImageBox = styled.div`
 const TitleWrapper = styled.div`
     display: flex;
     justify-content: space-between;
+    align-items: center;
     > p {
         font-weight: 600;
         font-size: 30px;
@@ -167,6 +172,16 @@ const TitleWrapper = styled.div`
         color: white;
         border: none;
         cursor: pointer;
+    }
+    @media (max-width: 768px) {
+        > p {
+            font-size: 22px;
+        }
+        > button {
+            width: 100px;
+            height: 35px;
+            font-size: 13px;
+        }
     }
 `;
 
@@ -202,6 +217,13 @@ const PaginationWrapper = styled.div`
     gap: 20px;
     margin-top: 60px;
     margin-bottom: 80px;
+    flex-wrap: wrap;
+    justify-content: center;
+    @media (max-width: 768px) {
+        gap: 10px;
+        margin-top: 40px;
+        margin-bottom: 60px;
+    }
 `;
 
 const PageButton = styled.button<{ $active?: boolean }>`
@@ -219,6 +241,11 @@ const PageButton = styled.button<{ $active?: boolean }>`
     font-size: 14px;
     &:hover {
         background-color: #588DFF;
+    }
+    @media (max-width: 768px) {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
     }
 `;
 
@@ -239,5 +266,10 @@ const ArrowButton = styled.button<{ $disabled?: boolean }>`
     &:hover {
         background-color: ${({ $disabled }) => $disabled ? '#333' : '#588DFF'};
         color: ${({ $disabled }) => $disabled ? '#555' : 'white'};
+    }
+    @media (max-width: 768px) {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
     }
 `;

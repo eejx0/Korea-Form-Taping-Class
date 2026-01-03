@@ -1,11 +1,12 @@
 import styled from "styled-components"
+import { Popup } from "../components/popup";
 import BackgroundPicture1 from "../assets/img/png/home/1.jpeg";
 import BackgroundPicture2 from "../assets/img/png/home/2.jpeg";
 import BackgroundPicture3 from "../assets/img/png/home/3.jpeg";
 import BackgroundPicture4 from "../assets/img/png/home/4.jpeg";
 import BackgroundPicture5 from "../assets/img/png/home/5.jpeg";
 import BackgroundPicture6 from "../assets/img/png/home/6.jpeg";
-import BackgroundPicture7 from "../assets/img/png/home/7.jpeg";
+import BackgroundPicture7 from "../assets/img/png/home/7.png";
 import RightArrow from "../assets/img/svg/rightArrow.svg";
 import SmallRightArrow from "../assets/img/svg/smallRightArrow.svg";
 import { motion } from "framer-motion"
@@ -63,6 +64,7 @@ export const Home = () => {
 
     return (
         <>
+            <Popup />
             <Wrapper>
                 <Background>
                     {BackgroundPictures.map((img, index) => (

@@ -205,18 +205,31 @@ const TitleWrapper = styled.div`
         font-size: 30px;
         font-weight: 600;
     }
+    @media (max-width: 768px) {
+        gap: 10px;
+        > p {
+            font-size: 22px;
+        }
+    }
 `;
 
 const SubTitle = styled.div`
     font-size: 15px;
     font-weight: 400;
     color: ${({theme}) => theme.detailText};
+    @media (max-width: 768px) {
+        font-size: 13px;
+    }
 `;
 
 const InputWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     gap: 30px;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 15px;
+    }
 `;
 
 const InputBox = styled.div`
@@ -240,6 +253,7 @@ const TitleInput = styled.input`
 
 const Button = styled.button<{$active: boolean}>`
     width: 200px;
+    min-width: 200px;
     height: 50px;
     border-radius: 30px;
     background: ${({ $active }) =>
@@ -257,6 +271,10 @@ const Button = styled.button<{$active: boolean}>`
         color: white;
         font-weight: 600;
         font-size: 15px;
+    }
+    @media (max-width: 768px) {
+        width: 100%;
+        min-width: unset;
     }
 `;
 
@@ -282,9 +300,15 @@ const ContentTitleWrapper = styled.div`
     display: flex;
     width: 100%;
     justify-content: space-between;
+    align-items: center;
     > p {
         font-size: 30px;
         font-weight: 600;
+    }
+    @media (max-width: 768px) {
+        > p {
+            font-size: 22px;
+        }
     }
 `;
 
@@ -307,6 +331,12 @@ const PaymentContentWrapper = styled.div`
         font-size: 30px;
         font-weight: 600;
     }
+    @media (max-width: 768px) {
+        gap: 30px;
+        > p {
+            font-size: 22px;
+        }
+    }
 `;
 
 const PaymentInputWrapper = styled.div`
@@ -315,6 +345,10 @@ const PaymentInputWrapper = styled.div`
     gap: 30px;
     justify-content: space-between;
     align-items: center;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 20px;
+    }
 `;
 
 const LeftWrapper = styled.div`
@@ -322,6 +356,9 @@ const LeftWrapper = styled.div`
     flex-direction: column;
     gap: 30px;
     width: 100%;
+    @media (max-width: 768px) {
+        gap: 20px;
+    }
 `;
 
 const RightWrapper = styled.div`
@@ -329,6 +366,9 @@ const RightWrapper = styled.div`
     flex-direction: column;
     gap: 30px;
     width: 100%;
+    @media (max-width: 768px) {
+        gap: 20px;
+    }
 `;
 
 const TitleInputWrapper = styled.div`
@@ -343,6 +383,11 @@ const AddFileWrapper = styled.div`
     align-items: center;
     gap: 35px;
     height: 50px;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        height: auto;
+        gap: 15px;
+    }
 `;
 
 const FileButton = styled.button`
@@ -362,6 +407,10 @@ const FileButton = styled.button`
     transition: 0.2s;
     &:hover {
         background-color: #355599;
+    }
+    @media (max-width: 768px) {
+        width: 100%;
+        min-width: unset;
     }
 `;
 

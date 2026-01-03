@@ -84,6 +84,7 @@ const Wrapper = styled.div`
     padding-right: 270px;
     flex-direction: column;
     margin-top: 70px;
+    margin-bottom: 80px;
     @media (max-width: 1300px) {
         padding-left: 200px;
         padding-right: 200px;
@@ -100,6 +101,13 @@ const Wrapper = styled.div`
         font-size: 30px;
         font-weight: 600;
     }
+    @media (max-width: 768px) {
+        margin-top: 40px;
+        margin-bottom: 60px;
+        > p {
+            font-size: 22px;
+        }
+    }
 `;
 
 const ContentWrapper = styled.div`
@@ -109,6 +117,11 @@ const ContentWrapper = styled.div`
     justify-content: space-between;
     gap: 30px;
     margin-top: 40px;
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-top: 30px;
+    }
 `;
 
 const SnsWrapper = styled.a`
@@ -118,6 +131,12 @@ const SnsWrapper = styled.a`
     cursor: pointer;
     .icon {
         width: 40px;
+    }
+    @media (max-width: 768px) {
+        gap: 20px;
+        .icon {
+            width: 35px;
+        }
     }
 `;
 
@@ -130,5 +149,10 @@ const TextWrapper = styled.div`
     > p {
         font-size: 20px;
         font-weight: 500;
+    }
+    @media (max-width: 768px) {
+        > p {
+            font-size: 16px;
+        }
     }
 `;

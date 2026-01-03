@@ -52,6 +52,9 @@ const StudentBoxWrapper = styled.div`
     flex-direction: column;
     border: 2px solid #4AE09C;
     border-radius: 10px;
+    @media (max-width: 768px) {
+        width: 100%;
+    }
 `;
 
 const StudentTitleBox = styled.div`
@@ -67,6 +70,13 @@ const StudentTitleBox = styled.div`
         font-size: 15px;
         color: #C6C6C6;
     }
+    @media (max-width: 768px) {
+        padding: 20px 25px;
+        gap: 10px;
+        > p {
+            font-size: 13px;
+        }
+    }
 `;
 
 const StudentTitleWrapper = styled.div`
@@ -79,6 +89,15 @@ const StudentTitleWrapper = styled.div`
         font-weight: 600;
         color: #4AE09C;
     }
+    @media (max-width: 768px) {
+        gap: 10px;
+        > p {
+            font-size: 18px;
+        }
+        > img {
+            width: 24px;
+        }
+    }
 `;
 
 const StudentContentBox = styled.div`
@@ -86,6 +105,9 @@ const StudentContentBox = styled.div`
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    @media (max-width: 768px) {
+        padding: 20px 25px;
+    }
 `;
 
 const MainProcessWrapper = styled.div`
@@ -96,6 +118,14 @@ const MainProcessWrapper = styled.div`
     > h3 {
         color: #4AE09C;
     }
+    @media (max-width: 768px) {
+        > p {
+            font-size: 14px;
+        }
+        > h3 {
+            font-size: 18px;
+        }
+    }
 `;
 
 const OthersWrapper = styled.div`
@@ -103,6 +133,10 @@ const OthersWrapper = styled.div`
     display: flex;
     flex-direction: column;
     gap: 15px;
+    @media (max-width: 768px) {
+        margin-top: 25px;
+        gap: 12px;
+    }
 `;
 
 const CourseWrapper = styled.div`
@@ -110,10 +144,24 @@ const CourseWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    @media (max-width: 768px) {
+        > p {
+            font-size: 14px;
+        }
+    }
 `;
 
 const CourseTitleWrapper = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
+    @media (max-width: 768px) {
+        gap: 8px;
+        > p {
+            font-size: 14px;
+        }
+        > img {
+            width: 16px;
+        }
+    }
 `;

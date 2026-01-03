@@ -89,6 +89,12 @@ const Container = styled.div`
         font-size: 30px;
         font-weight: 600;
     }
+    @media (max-width: 768px) {
+        margin-top: 40px;
+        > p {
+            font-size: 24px;
+        }
+    }
 `;
 
 const ListWrapper = styled.div`
@@ -97,6 +103,10 @@ const ListWrapper = styled.div`
     gap: 25px;
     margin-top: 30px;
     width: 100%;
+    @media (max-width: 768px) {
+        gap: 15px;
+        margin-top: 20px;
+    }
 `;
 
 const ListBox = styled.div`
@@ -110,6 +120,14 @@ const ListBox = styled.div`
     .title {
         font-size: 20px;
         font-weight: 600;
+    }
+    @media (max-width: 768px) {
+        padding: 15px 20px;
+        border-radius: 15px;
+        gap: 15px;
+        .title {
+            font-size: 16px;
+        }
     }
 `;
 
@@ -126,6 +144,15 @@ const RowListBox = styled.div`
         font-size: 20px;
         font-weight: 600;
     }
+    @media (max-width: 768px) {
+        width: 100%;
+        padding: 15px 20px;
+        border-radius: 15px;
+        gap: 15px;
+        .title {
+            font-size: 16px;
+        }
+    }
 `;
 
 const List = styled.div`
@@ -138,10 +165,17 @@ const List = styled.div`
         background: none;
         color: ${({theme}) => theme.detailText};
     }
+    @media (max-width: 768px) {
+        font-size: 13px;
+    }
 `;
 
 const RowWrapper = styled.div`
     display: flex;
     width: 100%;
     gap: 25px;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 15px;
+    }
 `;

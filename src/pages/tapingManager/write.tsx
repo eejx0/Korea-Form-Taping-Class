@@ -169,12 +169,21 @@ const TitleWrapper = styled.div`
         font-size: 30px;
         font-weight: 600;
     }
+    @media (max-width: 768px) {
+        gap: 10px;
+        > p {
+            font-size: 22px;
+        }
+    }
 `;
 
 const SubTitle = styled.div`
     font-size: 15px;
     font-weight: 400;
     color: ${({theme}) => theme.detailText};
+    @media (max-width: 768px) {
+        font-size: 13px;
+    }
 `;
 
 const InputWrapper = styled.div`
@@ -182,6 +191,10 @@ const InputWrapper = styled.div`
     align-items: flex-start;
     justify-content: space-between;
     gap: 30px;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 15px;
+    }
 `;
 
 const InputBox = styled.div`
@@ -224,6 +237,10 @@ const Button = styled.button<{$active: boolean}>`
         font-weight: 600;
         font-size: 15px;
     }
+    @media (max-width: 768px) {
+        width: 100%;
+        min-width: unset;
+    }
 `;
 
 const ContentWrapper = styled.div`
@@ -241,6 +258,11 @@ const ContentTitleWrapper = styled.div`
     > p {
         font-size: 30px;
         font-weight: 600;
+    }
+    @media (max-width: 768px) {
+        > p {
+            font-size: 20px;
+        }
     }
 `;
 
@@ -280,6 +302,16 @@ const AddFileWrapper = styled.div`
         transition: 0.2s;
         &:hover {
             background-color: #355599;
+        }
+    }
+    @media (max-width: 768px) {
+        flex-direction: column;
+        height: auto;
+        gap: 15px;
+        > button {
+            width: 100%;
+            min-width: unset;
+            height: 50px;
         }
     }
 `;

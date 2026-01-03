@@ -126,6 +126,31 @@ const Wrapper = styled.table`
             }
         }
     }
+    @media (max-width: 768px) {
+        > thead {
+            > tr {
+                > th {
+                    font-size: 13px;
+                    padding-bottom: 8px;
+                }
+                .date {
+                    font-size: 13px;
+                    width: 90px;
+                }
+            }
+        }
+        > tbody {
+            > tr {
+                > td {
+                    font-size: 13px;
+                    padding: 8px 3px;
+                }
+                .date {
+                    font-size: 12px;
+                }
+            }
+        }
+    }
 `;
 
 const PaginationWrapper = styled.div`
@@ -134,6 +159,13 @@ const PaginationWrapper = styled.div`
     gap: 20px;
     margin-top: 60px;
     margin-bottom: 80px;
+    flex-wrap: wrap;
+    justify-content: center;
+    @media (max-width: 768px) {
+        gap: 10px;
+        margin-top: 40px;
+        margin-bottom: 60px;
+    }
 `;
 
 const PageButton = styled.button<{ $active?: boolean }>`
@@ -151,6 +183,11 @@ const PageButton = styled.button<{ $active?: boolean }>`
     font-size: 14px;
     &:hover {
         background-color: #588DFF;
+    }
+    @media (max-width: 768px) {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
     }
 `;
 
@@ -171,5 +208,10 @@ const ArrowButton = styled.button<{ $disabled?: boolean }>`
     &:hover {
         background-color: ${({ $disabled }) => $disabled ? '#333' : '#588DFF'};
         color: ${({ $disabled }) => $disabled ? '#555' : 'white'};
+    }
+    @media (max-width: 768px) {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
     }
 `;

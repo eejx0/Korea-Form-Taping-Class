@@ -115,6 +115,7 @@ const Wrapper = styled.div`
     padding-right: 270px;
     flex-direction: column;
     margin-top: 70px;
+    margin-bottom: 80px;
     @media (max-width: 1300px) {
         padding-left: 200px;
         padding-right: 200px;
@@ -127,15 +128,25 @@ const Wrapper = styled.div`
         padding-left: 30px;
         padding-right: 30px;
     }
+    @media (max-width: 768px) {
+        margin-top: 40px;
+        margin-bottom: 60px;
+    }
 `;
 
 const TitleWrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 15px;
     > p {
         font-size: 30px;
         font-weight: 600;
+    }
+    @media (max-width: 768px) {
+        > p {
+            font-size: 20px;
+        }
     }
 `;
 
@@ -162,6 +173,13 @@ const EditButton = styled.div`
     > img {
         width: 18px;
     }
+    @media (max-width: 768px) {
+        width: 40px;
+        height: 40px;
+        > img {
+            width: 14px;
+        }
+    }
 `;
 
 const SaveButtonWrapper = styled.div`
@@ -182,6 +200,10 @@ const SaveButton = styled.div`
     transition: 0.2s;
     &:hover {
         background-color: #355599;
+    }
+    @media (max-width: 768px) {
+        width: 40px;
+        height: 40px;
     }
 `;
 
@@ -222,6 +244,14 @@ const RegisterButton = styled.div`
         font-weight: 600;
         color: #588DFF;
     }
+    @media (max-width: 768px) {
+        width: 160px;
+        height: 45px;
+        gap: 10px;
+        > p {
+            font-size: 14px;
+        }
+    }
 `;
 
 const PaymentWrapper = styled.div`
@@ -230,6 +260,10 @@ const PaymentWrapper = styled.div`
     justify-content: space-between;
     gap: 30px;
     width: 100%;
+    @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 20px;
+    }
 `;
 
 const StyledMessage = styled.div`
