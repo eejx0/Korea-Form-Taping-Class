@@ -97,7 +97,6 @@ export const Home = () => {
                             {schedules.length > 0 ? (
                                 schedules.map((schedule) => (
                                     <List key={schedule.id} onClick={() => navigate(`/main/education/schedule/${schedule.id}`)}>
-                                        <p className="color">{schedule.dates}</p>
                                         <p>{schedule.title.length > 15 ? schedule.title.slice(0, 15) + '...' : schedule.title}</p>
                                     </List>
                                 ))
@@ -292,7 +291,7 @@ const Title = styled.p`
 
 const ListWrapper = styled.div`
     display: flex;
-    gap: 105px;
+    gap: 50px;
     align-items: center;
     font-weight: 600;
     font-size: 20px;

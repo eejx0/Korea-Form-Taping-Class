@@ -5,9 +5,21 @@ import { getAlbumList, getImageUrl } from "../../apis/classAlbum";
 import { GetAlbumListResponse } from "../../apis/classAlbum/type";
 
 const ITEMS_PER_PAGE = 9;
-const PAGES_PER_GROUP = 10;
+
+const useIsMobile = () => {
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    useEffect(() => {
+        const mql = window.matchMedia('(max-width: 768px)');
+        const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+        mql.addEventListener('change', handler);
+        return () => mql.removeEventListener('change', handler);
+    }, []);
+    return isMobile;
+};
 
 export const ClassAlbumList = () => {
+    const isMobile = useIsMobile();
+    const pagesPerGroup = isMobile ? 5 : 10;
     const [listData, setListData] = useState<GetAlbumListResponse | null>(null);
     const [page, setPage] = useState<number>(0);
     const [pageGroup, setPageGroup] = useState<number>(0);
@@ -28,22 +40,22 @@ export const ClassAlbumList = () => {
     const totalPages = listData ? listData.maxPage + 1 : 0;
     const currentItems = listData?.items.slice(0, ITEMS_PER_PAGE) || [];
 
-    const totalGroups = Math.ceil(totalPages / PAGES_PER_GROUP);
-    const startPage = pageGroup * PAGES_PER_GROUP;
-    const endPage = Math.min(startPage + PAGES_PER_GROUP, totalPages);
+    const totalGroups = Math.ceil(totalPages / pagesPerGroup);
+    const startPage = pageGroup * pagesPerGroup;
+    const endPage = Math.min(startPage + pagesPerGroup, totalPages);
     const visiblePages = Array.from({ length: endPage - startPage }, (_, i) => startPage + i);
 
     const handlePrevGroup = () => {
         if (pageGroup > 0) {
             setPageGroup(pageGroup - 1);
-            setPage((pageGroup - 1) * PAGES_PER_GROUP);
+            setPage((pageGroup - 1) * pagesPerGroup);
         }
     };
 
     const handleNextGroup = () => {
         if (pageGroup < totalGroups - 1) {
             setPageGroup(pageGroup + 1);
-            setPage((pageGroup + 1) * PAGES_PER_GROUP);
+            setPage((pageGroup + 1) * pagesPerGroup);
         }
     };
 

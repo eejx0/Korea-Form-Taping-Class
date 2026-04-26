@@ -177,6 +177,9 @@ const Wrapper = styled.div`
         padding-left: 30px;
         padding-right: 30px;
     }
+    @media (max-width: 768px) {
+        padding-bottom: 50px;
+    }
 `;
 
 const TitleWrapper = styled.div`

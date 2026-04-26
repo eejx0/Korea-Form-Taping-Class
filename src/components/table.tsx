@@ -1,7 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components"
 
-const PAGES_PER_GROUP = 10;
+const useIsMobile = () => {
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    useEffect(() => {
+        const mql = window.matchMedia('(max-width: 768px)');
+        const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+        mql.addEventListener('change', handler);
+        return () => mql.removeEventListener('change', handler);
+    }, []);
+    return isMobile;
+};
 
 interface TableProps {
     data: {dates: string; title: string; file: string; id: string}[];
@@ -12,25 +21,27 @@ interface TableProps {
 }
 
 export const Table = ({data, currentPage, maxPage, onPageChange, onRowClick}: TableProps) => {
+    const isMobile = useIsMobile();
+    const pagesPerGroup = isMobile ? 5 : 10;
     const [pageGroup, setPageGroup] = useState<number>(0);
 
     const totalPages = maxPage + 1;
-    const totalGroups = Math.ceil(totalPages / PAGES_PER_GROUP);
-    const startPage = pageGroup * PAGES_PER_GROUP;
-    const endPage = Math.min(startPage + PAGES_PER_GROUP, totalPages);
+    const totalGroups = Math.ceil(totalPages / pagesPerGroup);
+    const startPage = pageGroup * pagesPerGroup;
+    const endPage = Math.min(startPage + pagesPerGroup, totalPages);
     const visiblePages = Array.from({ length: endPage - startPage }, (_, i) => startPage + i);
 
     const handlePrevGroup = () => {
         if (pageGroup > 0) {
             setPageGroup(pageGroup - 1);
-            onPageChange((pageGroup - 1) * PAGES_PER_GROUP);
+            onPageChange((pageGroup - 1) * pagesPerGroup);
         }
     };
 
     const handleNextGroup = () => {
         if (pageGroup < totalGroups - 1) {
             setPageGroup(pageGroup + 1);
-            onPageChange((pageGroup + 1) * PAGES_PER_GROUP);
+            onPageChange((pageGroup + 1) * pagesPerGroup);
         }
     };
 

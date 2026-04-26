@@ -159,6 +159,9 @@ const Wrapper = styled.div`
         padding-left: 30px;
         padding-right: 30px;
     }
+    @media (max-width: 768px) {
+        padding-bottom: 50px;
+    }
 `;
 
 const TitleWrapper = styled.div`
@@ -319,7 +322,7 @@ const AddFileWrapper = styled.div`
 const FileName = styled.div`
     display: flex;
     width: 100%;
-    height: 100%;
+    height: 50px;
     background-color: ${({theme}) => theme.inputBackground};
     border-radius: 8px;
     padding: 0px 18px 0px 18px;

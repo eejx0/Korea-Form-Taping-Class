@@ -1,11 +1,9 @@
 import styled from "styled-components"
-import SaveIcon from "../../../assets/img/svg/save.svg";
 import EditIcon from "../../../assets/img/svg/edit.svg";
 import WarningIcon from "../../../assets/img/svg/error.svg";
 import RightIcon from "../../../assets/img/svg/blueRightArrow.svg";
 import { ClinicianBox } from "../../../components/paymentAmount/clinicianBox";
 import { StudentBox } from "../../../components/paymentAmount/studentBox";
-import { Message } from "../../../components/message";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getScheduleDetail } from "../../../apis/education";
@@ -13,7 +11,6 @@ import { GetScheduleResponse } from "../../../apis/education/type";
 import { downloadFile } from "../../../apis";
 
 export const EducationScheduleDetail = () => {
-    const [isHovered, setIsHovered] = useState<boolean>(false);
     const [isActive, setIsActive] = useState<boolean | null>(null);
     const [scheduleTitle, setScheduleTitle] = useState<string>("");
     const [scheduleDetail, setScheduleDetail] = useState<GetScheduleResponse | null>(null);
@@ -71,19 +68,9 @@ export const EducationScheduleDetail = () => {
                         <EditButton onClick={handleEditButtonClick}>
                             <img src={EditIcon} alt="수정" />
                         </EditButton>
-                        <SaveButtonWrapper
-                            onMouseEnter={() => setIsHovered(true)}
-                            onMouseLeave={() => setIsHovered(false)}
-                        >
-                            {isHovered && (
-                                <StyledMessage>
-                                    <Message />
-                                </StyledMessage>
-                            )}
-                            <SaveButton onClick={handleSaveClick}>
-                                <img src={SaveIcon} alt="저장" />
-                            </SaveButton>
-                        </SaveButtonWrapper>
+                        <DownloadButton onClick={handleSaveClick}>
+                            공고문 확인하기
+                        </DownloadButton>
                     </ButtonWrapper>
                 </TitleWrapper>
                 <Line />
@@ -144,6 +131,8 @@ const TitleWrapper = styled.div`
         font-weight: 600;
     }
     @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: flex-start;
         > p {
             font-size: 20px;
         }
@@ -182,28 +171,24 @@ const EditButton = styled.div`
     }
 `;
 
-const SaveButtonWrapper = styled.div`
-  position: relative; 
-`;
-
-const SaveButton = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    height: 50px;
-    border-radius: 100px;
-    border: none;
-    background-color: #588DFF;
+const DownloadButton = styled.button`
+    padding: 10px 20px;
+    border: 1px solid #588DFF;
+    border-radius: 8px;
+    background-color: transparent;
+    color: #588DFF;
+    font-size: 15px;
+    font-weight: 600;
     cursor: pointer;
-    position: relative;
     transition: 0.2s;
+    white-space: nowrap;
     &:hover {
-        background-color: #355599;
+        background-color: #588DFF;
+        color: white;
     }
     @media (max-width: 768px) {
-        width: 40px;
-        height: 40px;
+        padding: 8px 14px;
+        font-size: 13px;
     }
 `;
 
@@ -266,12 +251,3 @@ const PaymentWrapper = styled.div`
     }
 `;
 
-const StyledMessage = styled.div`
-  position: absolute;
-  bottom: 60px;
-  border-radius: 8px;
-  padding: 8px 12px;
-  box-shadow: 0px 2px 8px rgba(0,0,0,0.15);
-  z-index: 100;
-  white-space: nowrap;
-`;
