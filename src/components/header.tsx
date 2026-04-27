@@ -127,19 +127,15 @@ export const Header = ({ isDarkMode, setIsDarkMode }: HeaderProps) => {
             }
             {isMobileMenuOpen && <MobileMenuOverlay onClick={closeMobileMenu} />}
             <MobileMenuDrawer $isOpen={isMobileMenuOpen}>
-                <MobileMenuHeader>
-                    <MobileMenuTitle>메뉴</MobileMenuTitle>
-                    <MobileCloseButton onClick={closeMobileMenu}>✕</MobileCloseButton>
-                </MobileMenuHeader>
+                <MobileHandle />
                 <MobileNavList>
                     <MobileNavItem to={'/main/introduce/greeting'} onClick={closeMobileMenu}>
                         클래스 소개
                     </MobileNavItem>
-                    <MobileNavDivider />
                     <MobileEducationWrapper>
                         <MobileEducationHeader onClick={() => setIsMobileEducationOpen(!isMobileEducationOpen)}>
                             <span>교육</span>
-                            <MobileArrow $isOpen={isMobileEducationOpen} />
+                            <MobileArrow $isOpen={isMobileEducationOpen}>&#9662;</MobileArrow>
                         </MobileEducationHeader>
                         <MobileEducationDropdown $isOpen={isMobileEducationOpen}>
                             <MobileSubNavItem to={'/main/education/process'} onClick={closeMobileMenu}>
@@ -153,19 +149,15 @@ export const Header = ({ isDarkMode, setIsDarkMode }: HeaderProps) => {
                             </MobileSubNavItem>
                         </MobileEducationDropdown>
                     </MobileEducationWrapper>
-                    <MobileNavDivider />
                     <MobileNavItem to={'/main/formTaping'} onClick={closeMobileMenu}>
                         Form Taping 자료실
                     </MobileNavItem>
-                    <MobileNavDivider />
                     <MobileNavItem to={'/main/tapingManager'} onClick={closeMobileMenu}>
                         한국전문테이핑관리사
                     </MobileNavItem>
-                    <MobileNavDivider />
                     <MobileNavItem to={'/main/classAlbum'} onClick={closeMobileMenu}>
                         클래스 앨범
                     </MobileNavItem>
-                    <MobileNavDivider />
                     <MobileNavItem to={'/main/sns'} onClick={closeMobileMenu}>
                         관련 SNS
                     </MobileNavItem>
@@ -182,7 +174,7 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
     display: flex;
-    height: 84px;
+    height: 65px;
     width: 100%;
     align-items: center;
     justify-content: space-between;
@@ -321,13 +313,13 @@ const MobileMenuButton = styled.button<{$isOpen: boolean}>`
         transform-origin: center;
 
         &:nth-child(1) {
-            transform: ${({$isOpen}) => $isOpen ? 'rotate(45deg) translate(5px, 5px)' : 'rotate(0)'};
+            transform: rotate(0);
         }
         &:nth-child(2) {
-            opacity: ${({$isOpen}) => $isOpen ? 0 : 1};
+            opacity: 1;
         }
         &:nth-child(3) {
-            transform: ${({$isOpen}) => $isOpen ? 'rotate(-45deg) translate(6px, -6px)' : 'rotate(0)'};
+            transform: rotate(0);
         }
     }
 `;
@@ -341,7 +333,8 @@ const MobileMenuOverlay = styled.div`
         left: 0;
         right: 0;
         bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
         z-index: 999;
     }
 `;
@@ -356,62 +349,45 @@ const MobileMenuDrawer = styled.div<{$isOpen: boolean}>`
         left: 0;
         right: 0;
         background-color: ${({theme}) => theme.background};
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
-        padding: 20px;
+        border-top-left-radius: 24px;
+        border-top-right-radius: 24px;
+        padding: 12px 24px 30px;
         z-index: 1000;
         transform: ${({$isOpen}) => $isOpen ? 'translateY(0)' : 'translateY(100%)'};
-        transition: transform 0.3s ease-in-out;
+        transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
         max-height: 80vh;
         overflow-y: auto;
-        // border-top: 1px solid ${({theme}) => theme.border};
+        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
     }
 `;
 
-const MobileMenuHeader = styled.div`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid ${({theme}) => theme.border};
-`;
-
-const MobileMenuTitle = styled.p`
-    font-size: 18px;
-    font-weight: 700;
-`;
-
-const MobileCloseButton = styled.button`
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: ${({theme}) => theme.text};
-    padding: 5px;
+const MobileHandle = styled.div`
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 0 auto 20px;
 `;
 
 const MobileNavList = styled.div`
     display: flex;
     flex-direction: column;
+    gap: 4px;
 `;
 
 const MobileNavItem = styled(Link)`
-    padding: 15px 10px;
+    padding: 14px 16px;
     font-size: 16px;
     font-weight: 600;
     color: ${({theme}) => theme.text};
     text-decoration: none;
+    border-radius: 12px;
     transition: 0.2s;
 
-    &:hover {
+    &:hover, &:active {
+        background-color: rgba(88, 141, 255, 0.1);
         color: #588DFF;
     }
-`;
-
-const MobileNavDivider = styled.div`
-    // height: 1px;
-    // background-color: ${({theme}) => theme.border};
 `;
 
 const MobileEducationWrapper = styled.div`
@@ -423,8 +399,14 @@ const MobileEducationHeader = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 10px;
+    padding: 14px 16px;
+    border-radius: 12px;
     cursor: pointer;
+    transition: 0.2s;
+
+    &:hover, &:active {
+        background-color: rgba(88, 141, 255, 0.1);
+    }
 
     span {
         font-size: 16px;
@@ -437,6 +419,7 @@ const MobileArrow = styled.span<{$isOpen: boolean}>`
     font-size: 12px !important;
     transition: transform 0.3s ease;
     transform: ${({$isOpen}) => $isOpen ? 'rotate(180deg)' : 'rotate(0)'};
+    color: rgba(255, 255, 255, 0.4) !important;
 `;
 
 const MobileEducationDropdown = styled.div<{$isOpen: boolean}>`
@@ -445,27 +428,28 @@ const MobileEducationDropdown = styled.div<{$isOpen: boolean}>`
     overflow: hidden;
     max-height: ${({$isOpen}) => $isOpen ? '200px' : '0'};
     transition: max-height 0.3s ease;
-    // padding-left: 20px;
-    background-color: ${({theme}) => theme.inputBackground};
+    margin-left: 16px;
+    border-left: 2px solid rgba(88, 141, 255, 0.3);
 `;
 
 const MobileSubNavItem = styled(Link)`
-    padding: 12px 10px;
+    padding: 11px 16px;
     font-size: 14px;
     font-weight: 500;
-    color: ${({theme}) => theme.headerDropDownText};
+    color: rgba(255, 255, 255, 0.6);
     text-decoration: none;
+    transition: 0.2s;
 
-    &:hover {
-        color: ${({theme}) => theme.text};
+    &:hover, &:active {
+        color: #588DFF;
     }
 `;
 
 const MobileVisitCount = styled.p`
     text-align: center;
-    padding-top: 20px;
-    margin-top: 10px;
-    // border-top: 1px solid ${({theme}) => theme.border};
+    padding-top: 16px;
+    margin-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.35);
 `;

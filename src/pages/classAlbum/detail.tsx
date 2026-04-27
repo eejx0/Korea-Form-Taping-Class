@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { motion } from "framer-motion"
 import { useParams, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { getAlbumDetail, getImageUrl } from "../../apis/classAlbum";
@@ -25,7 +26,7 @@ export const ClassAlbumDetail = () => {
 
     return (
         <>
-            <Wrapper>
+            <Wrapper as={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                 <p>{title}</p>
                 <ContentWrapper>
                     <Line />

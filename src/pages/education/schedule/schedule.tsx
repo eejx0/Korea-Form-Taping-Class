@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { motion } from "framer-motion"
 import { Table } from "../../../components/table";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -24,7 +25,7 @@ export const EducationSchedule = () => {
 
     return (
         <>
-            <Wrapper>
+            <Wrapper as={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                 <TitleWrapper>
                     <p>교육 일정</p>
                     <button onClick={() => navigate('/main/education/schedule/add')}>글쓰기</button>

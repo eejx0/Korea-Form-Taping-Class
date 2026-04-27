@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { motion } from "framer-motion"
 import SaveIcon from "../../assets/img/svg/save.svg";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
@@ -44,7 +45,7 @@ export const FormTapingDetail = () => {
 
     return (
         <>
-            <Wrapper>
+            <Wrapper as={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                 <TitleWrapper>
                     <p>{detail?.title || "로딩 중..."}</p>
                     <Button onClick={handleDownload}>

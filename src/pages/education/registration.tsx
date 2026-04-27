@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { motion } from "framer-motion"
 import { Input } from "../../components/input";
 import { getActiveScheduleList, getEducationFee, postRegister } from "../../apis/education";
 import { useEffect, useState } from "react";
@@ -123,7 +124,7 @@ export const EducationRegistration = () => {
 
     return (
         <>
-            <Wrapper>
+            <Wrapper as={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                 <TitleWrapper>
                     <p>교육 등록 및 도서 구매</p>
                     <RegisterButton $disabled={!isFormValid || isSubmitting} onClick={handleRegister}>

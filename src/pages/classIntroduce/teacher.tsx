@@ -1,11 +1,14 @@
 import styled from "styled-components"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+
+const TABS = ["인사말", "연혁", "강사"] as const;
 
 export const Teacher = () => {
     const [selected, setSelected] = useState<string>('강사');
     const navigate = useNavigate();
-    
+
     const handleSelect = (item: string) => {
         setSelected(item);
 
@@ -27,45 +30,48 @@ export const Teacher = () => {
     return (
         <>
             <Wrapper>
-                <Container>
-                    <ListWrapper>
-                        {["인사말", "연혁", "강사"].map((item) => (
-                            <Circle
-                                key={item}
-                                onClick={() => handleSelect(item)}
-                                $isSelected={selected === item}
-                            >
-                                {item}
-                            </Circle>
-                        ))}
-                    </ListWrapper>
+                <PageTitle>클래스 소개</PageTitle>
+                <TabWrapper>
+                    {TABS.map((item) => (
+                        <Tab
+                            key={item}
+                            onClick={() => handleSelect(item)}
+                            $isSelected={selected === item}
+                        >
+                            {item}
+                            {selected === item && <TabIndicator layoutId="tab-indicator" />}
+                        </Tab>
+                    ))}
+                </TabWrapper>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
                     <ContentWrapper>
-                        <p>강사 프로필</p>
-                        <ContentBox>
-                            <BoxWrapper>
-                                <p>강사 프로필</p>
-                                <Box>
-                                    <p>강사 : 이대희 물리치료학 박사</p>
-                                    <br/>
-                                    <p>전) 임상발란스테이핑물리치료학회 강사</p>
-                                    <p>전) 대한스파이랄테이핑협회 연수강사</p>
-                                    <p>현) KFTC 강사</p>
-                                    <p>현) ROCKTAPE FMT Basic 국제강사</p>
-                                </Box>
-                            </BoxWrapper>
-                            <BoxWrapper>
-                                <p>강의 경력</p>
-                                <Box>
-                                    <p>영산대학교 물리치료학과 시간강사</p>
-                                    <p>동의대학교 물리치료학과 시간강사</p>
-                                    <p>동서대학교 체육학과 시간강사</p>
-                                    <p>경성대학교 물리치료학과 시간강사</p>
-                                    <p>그외 다수 대학 출강</p>
-                                </Box>
-                            </BoxWrapper>
-                        </ContentBox>
+                        <Card>
+                            <CardTitle>강사 프로필</CardTitle>
+                            <CardBody>
+                                <p>강사 : 이대희 물리치료학 박사</p>
+                                <br/>
+                                <p>전) 임상발란스테이핑물리치료학회 강사</p>
+                                <p>전) 대한스파이랄테이핑협회 연수강사</p>
+                                <p>현) KFTC 강사</p>
+                                <p>현) ROCKTAPE FMT Basic 국제강사</p>
+                            </CardBody>
+                        </Card>
+                        <Card>
+                            <CardTitle>강의 경력</CardTitle>
+                            <CardBody>
+                                <p>영산대학교 물리치료학과 시간강사</p>
+                                <p>동의대학교 물리치료학과 시간강사</p>
+                                <p>동서대학교 체육학과 시간강사</p>
+                                <p>경성대학교 물리치료학과 시간강사</p>
+                                <p>그외 다수 대학 출강</p>
+                            </CardBody>
+                        </Card>
                     </ContentWrapper>
-                </Container>
+                </motion.div>
             </Wrapper>
         </>
     )
@@ -73,169 +79,112 @@ export const Teacher = () => {
 
 const Wrapper = styled.div`
     display: flex;
-    padding-left: 270px;
-    padding-right: 270px;
     flex-direction: column;
-    height: calc(100vh - 90px - 84px);
+    padding: 70px 270px 80px;
+    min-height: calc(100vh - 84px);
     @media (max-width: 1300px) {
-        padding-left: 200px;
-        padding-right: 200px;
+        padding: 70px 200px 80px;
     }
     @media (max-width: 1175px) {
-        padding-left: 50px;
-        padding-right: 50px;
+        padding: 70px 50px 80px;
     }
     @media (max-width: 875px) {
-        padding-left: 30px;
-        padding-right: 30px;
+        padding: 40px 30px 60px;
     }
     @media (max-width: 768px) {
-        height: auto;
         min-height: calc(100vh - 60px);
-        padding-bottom: 40px;
     }
 `;
 
-const Container = styled.div`
-    display: flex;
-    justify-content: space-between;
-    gap: 100px;
-    margin-top: 70px;
-    height: 100%;
+const PageTitle = styled.h1`
+    font-size: 32px;
+    font-weight: 700;
     @media (max-width: 768px) {
-        flex-direction: column;
-        gap: 30px;
-        margin-top: 40px;
+        font-size: 24px;
     }
 `;
 
-const ListWrapper = styled.div`
+const TabWrapper = styled.div`
     display: flex;
-    flex-direction: column;
-    gap: 35px;
-    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     @media (max-width: 768px) {
-        flex-direction: row;
-        justify-content: center;
-        gap: 20px;
+        margin-top: 20px;
     }
 `;
 
-const Circle = styled.div<{ $isSelected: boolean }>`
-    width: 90px;
-    height: 90px;
-    background-color: #355599;
-    font-size: 15px;
-    color: white;
-
-    ${({ $isSelected }) =>
-        $isSelected &&
-        `
-        width: 104px;
-        height: 104px;
-        background-color: #588DFF;
-        font-size: 20px;
-    `}
-
-    &:hover {
-        width: 104px;
-        height: 104px;
-        background-color: #588DFF;
-        font-size: 20px;
-    }
-
-    border-radius: 50%;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+const Tab = styled.div<{ $isSelected: boolean }>`
+    position: relative;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: ${({ $isSelected }) => $isSelected ? '600' : '400'};
+    color: ${({ $isSelected }) => $isSelected ? '#588DFF' : 'rgba(255, 255, 255, 0.5)'};
     cursor: pointer;
-    transition: all 0.2s;
-
-    @media (max-width: 768px) {
-        width: 70px;
-        height: 70px;
-        font-size: 13px;
-        ${({ $isSelected }) =>
-            $isSelected &&
-            `
-            width: 80px;
-            height: 80px;
-            font-size: 15px;
-        `}
-        &:hover {
-            width: 80px;
-            height: 80px;
-            font-size: 15px;
-        }
+    transition: color 0.3s;
+    &:hover {
+        color: ${({ $isSelected }) => $isSelected ? '#588DFF' : 'rgba(255, 255, 255, 0.8)'};
     }
+    @media (max-width: 768px) {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+`;
+
+const TabIndicator = styled(motion.div)`
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #588DFF;
+    border-radius: 1px;
 `;
 
 const ContentWrapper = styled.div`
     display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-top: 50px;
-    height: 100%;
-    > p {
-        font-size: 25px;
-        font-weight: 600;
-    }
-    @media (max-width: 768px) {
-        margin-top: 0;
-        > p {
-            font-size: 20px;
-        }
-    }
-`;
-
-const ContentBox = styled.div`
-    display: flex;
-    margin-top: 25px;
-    border-top: 1px solid ${({theme}) => theme.border};
-    border-bottom: 1px solid ${({theme}) => theme.border};
-    padding-top: 30px;
-    padding-bottom: 30px;
-    min-height: 70%;
-    justify-content: space-between;
-    gap: 30px;
+    gap: 25px;
+    margin-top: 40px;
     @media (max-width: 768px) {
         flex-direction: column;
-        min-height: auto;
-        padding-top: 20px;
-        padding-bottom: 20px;
+        margin-top: 25px;
     }
 `;
 
-const BoxWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
+const Card = styled.div`
     flex: 1;
-    > p {
-        font-size: 20px;
-        font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 30px;
+    transition: 0.3s;
+    &:hover {
+        border-color: rgba(88, 141, 255, 0.3);
+        box-shadow: 0 4px 20px rgba(88, 141, 255, 0.08);
     }
     @media (max-width: 768px) {
-        > p {
-            font-size: 16px;
-        }
+        padding: 20px;
     }
 `;
 
-const Box = styled.div`
-    padding: 20px 25px 20px 25px;
-    border-radius: 20px;
-    border: 1px solid ${({theme}) => theme.border};
-    margin-top: 30px;
+const CardTitle = styled.p`
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #588DFF;
+    @media (max-width: 768px) {
+        font-size: 17px;
+        margin-bottom: 15px;
+    }
+`;
+
+const CardBody = styled.div`
     > p {
-        font-size: 14px;
-        line-height: 1.6;
+        font-size: 15px;
+        line-height: 1.8;
     }
     @media (max-width: 768px) {
-        padding: 15px 20px;
-        margin-top: 15px;
         > p {
-            font-size: 13px;
+            font-size: 14px;
         }
     }
 `;

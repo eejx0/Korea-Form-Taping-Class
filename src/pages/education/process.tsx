@@ -1,9 +1,10 @@
 import styled from "styled-components"
+import { motion } from "framer-motion"
 
 export const EducationProcess = () => {
     return (
         <>
-            <Wrapper>
+            <Wrapper as={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                 <Container>
                     <p>교육 과정</p>
                     <ListWrapper>

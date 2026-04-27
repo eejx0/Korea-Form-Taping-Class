@@ -3,11 +3,14 @@ import { useState } from "react";
 import Profile from "../../assets/img/svg/profile.svg";
 import { GreetingSection } from "../../components/greetingSection";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+
+const TABS = ["인사말", "연혁", "강사"] as const;
 
 export const Greeting = () => {
     const [selected, setSelected] = useState<string>('인사말');
     const navigate = useNavigate();
-    
+
     const handleSelect = (item: string) => {
         setSelected(item);
 
@@ -28,26 +31,37 @@ export const Greeting = () => {
     return (
         <>
             <Wrapper>
-                <Container>
-                    <ListWrapper>
-                        {["인사말", "연혁", "강사"].map((item) => (
-                            <Circle
-                                key={item}
-                                onClick={() => handleSelect(item)}
-                                $isSelected={selected === item}
-                            >
-                                {item}
-                            </Circle>
-                        ))}
-                    </ListWrapper>
+                <PageTitle>클래스 소개</PageTitle>
+                <TabWrapper>
+                    {TABS.map((item) => (
+                        <Tab
+                            key={item}
+                            onClick={() => handleSelect(item)}
+                            $isSelected={selected === item}
+                        >
+                            {item}
+                            {selected === item && <TabIndicator layoutId="tab-indicator" />}
+                        </Tab>
+                    ))}
+                </TabWrapper>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
                     <ContentWrapper>
-                        <p>인사말</p>
-                        <ContentBox>
-                            <ProfileImg src={Profile} alt="이대희" />
-                            <GreetingSection/>
-                        </ContentBox>
+                        <ContentCard>
+                            <ProfileSection>
+                                <ProfileImg src={Profile} alt="이대희" />
+                                <ProfileName>이대희 박사</ProfileName>
+                                <ProfileRole>Korea Form-Taping Class</ProfileRole>
+                            </ProfileSection>
+                            <GreetingContent>
+                                <GreetingSection/>
+                            </GreetingContent>
+                        </ContentCard>
                     </ContentWrapper>
-                </Container>
+                </motion.div>
             </Wrapper>
         </>
     )
@@ -55,145 +69,119 @@ export const Greeting = () => {
 
 const Wrapper = styled.div`
     display: flex;
-    padding-left: 270px;
-    padding-right: 270px;
     flex-direction: column;
-    height: calc(100vh - 90px - 84px);
+    padding: 70px 270px 80px;
+    min-height: calc(100vh - 84px);
     @media (max-width: 1300px) {
-        padding-left: 200px;
-        padding-right: 200px;
+        padding: 70px 200px 80px;
     }
     @media (max-width: 1175px) {
-        padding-left: 50px;
-        padding-right: 50px;
+        padding: 70px 50px 80px;
     }
     @media (max-width: 875px) {
-        padding-left: 30px;
-        padding-right: 30px;
+        padding: 40px 30px 60px;
     }
     @media (max-width: 768px) {
-        height: auto;
         min-height: calc(100vh - 60px);
-        padding-bottom: 40px;
     }
 `;
 
-const Container = styled.div`
-    display: flex;
-    justify-content: space-between;
-    gap: 100px;
-    margin-top: 70px;
-    height: 100%;
+const PageTitle = styled.h1`
+    font-size: 32px;
+    font-weight: 700;
     @media (max-width: 768px) {
-        flex-direction: column;
-        gap: 30px;
-        margin-top: 40px;
+        font-size: 24px;
     }
 `;
 
-const ListWrapper = styled.div`
+const TabWrapper = styled.div`
     display: flex;
-    flex-direction: column;
-    gap: 35px;
-    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     @media (max-width: 768px) {
-        flex-direction: row;
-        justify-content: center;
-        gap: 20px;
+        margin-top: 20px;
     }
 `;
 
-const Circle = styled.div<{ $isSelected: boolean }>`
-    width: 90px;
-    height: 90px;
-    background-color: #355599;
-    font-size: 15px;
-    color: white;
-
-    ${({ $isSelected }) =>
-        $isSelected &&
-        `
-        width: 104px;
-        height: 104px;
-        background-color: #588DFF;
-        font-size: 20px;
-    `}
-
-    &:hover {
-        width: 104px;
-        height: 104px;
-        background-color: #588DFF;
-        font-size: 20px;
-    }
-
-    border-radius: 50%;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+const Tab = styled.div<{ $isSelected: boolean }>`
+    position: relative;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: ${({ $isSelected }) => $isSelected ? '600' : '400'};
+    color: ${({ $isSelected }) => $isSelected ? '#588DFF' : 'rgba(255, 255, 255, 0.5)'};
     cursor: pointer;
-    transition: all 0.2s;
-
-    @media (max-width: 768px) {
-        width: 70px;
-        height: 70px;
-        font-size: 13px;
-        ${({ $isSelected }) =>
-            $isSelected &&
-            `
-            width: 80px;
-            height: 80px;
-            font-size: 15px;
-        `}
-        &:hover {
-            width: 80px;
-            height: 80px;
-            font-size: 15px;
-        }
+    transition: color 0.3s;
+    &:hover {
+        color: ${({ $isSelected }) => $isSelected ? '#588DFF' : 'rgba(255, 255, 255, 0.8)'};
     }
+    @media (max-width: 768px) {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+`;
+
+const TabIndicator = styled(motion.div)`
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #588DFF;
+    border-radius: 1px;
 `;
 
 const ContentWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin-top: 50px;
-    height: 100%;
-    > p {
-        font-size: 25px;
-        font-weight: 600;
-    }
+    margin-top: 40px;
     @media (max-width: 768px) {
-        margin-top: 0;
-        > p {
-            font-size: 20px;
-        }
+        margin-top: 25px;
     }
 `;
 
-const ContentBox = styled.div`
+const ContentCard = styled.div`
     display: flex;
-    margin-top: 25px;
-    border-top: 1px solid ${({theme}) => theme.border};
-    border-bottom: 1px solid ${({theme}) => theme.border};
-    padding-top: 30px;
-    padding-bottom: 30px;
-    min-height: fit-content;
+    gap: 40px;
+    padding: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
     @media (max-width: 768px) {
         flex-direction: column;
-        gap: 20px;
-        padding-top: 20px;
-        padding-bottom: 20px;
+        align-items: center;
+        padding: 25px 20px;
+        gap: 25px;
     }
+`;
+
+const ProfileSection = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
 `;
 
 const ProfileImg = styled.img`
+    width: 140px;
     aspect-ratio: 0.85/1;
-    width: 150px;
-    margin-bottom: auto;
-    border-radius: 10px;
+    border-radius: 12px;
     @media (max-width: 768px) {
-        width: 120px;
-        align-self: center;
+        width: 110px;
     }
+`;
+
+const ProfileName = styled.p`
+    font-size: 18px;
+    font-weight: 600;
+    @media (max-width: 768px) {
+        font-size: 16px;
+    }
+`;
+
+const ProfileRole = styled.p`
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+`;
+
+const GreetingContent = styled.div`
+    flex: 1;
 `;

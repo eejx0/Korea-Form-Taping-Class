@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { motion } from "framer-motion"
 import EditIcon from "../../../assets/img/svg/edit.svg";
 import WarningIcon from "../../../assets/img/svg/error.svg";
 import RightIcon from "../../../assets/img/svg/blueRightArrow.svg";
@@ -61,7 +62,7 @@ export const EducationScheduleDetail = () => {
 
     return (
         <>
-            <Wrapper>
+            <Wrapper as={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                 <TitleWrapper>
                     <p>{scheduleTitle}</p>
                     <ButtonWrapper>

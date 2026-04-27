@@ -1,4 +1,5 @@
 import styled from "styled-components"
+import { motion } from "framer-motion"
 import { useNavigate } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { getAlbumList, getImageUrl } from "../../apis/classAlbum";
@@ -61,7 +62,7 @@ export const ClassAlbumList = () => {
 
     return (
         <>
-            <Wrapper>
+            <Wrapper as={motion.div} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                 <TitleWrapper>
                     <p>클래스 앨범</p>
                     <button onClick={() => navigate('/main/classAlbum/add')}>사진 올리기</button>

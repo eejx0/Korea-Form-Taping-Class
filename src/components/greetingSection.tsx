@@ -36,14 +36,25 @@ export const GreetingSection = () => {
 };
 
 const Wrapper = styled.div`
-    font-size: 16px;
-    color: #333;
-    padding-left: 30px;
-    line-height: 1.3;
+    font-size: 15px;
+    color: ${({theme}) => theme.text};
+    line-height: 1.8;
     height: auto;
+
+    > p {
+        margin-bottom: 12px;
+    }
 
     ul {
         margin: 16px 0;
         padding-left: 20px;
+    }
+
+    li {
+        line-height: 1.8;
+    }
+
+    @media (max-width: 768px) {
+        font-size: 14px;
     }
 `;

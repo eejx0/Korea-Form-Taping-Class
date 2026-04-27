@@ -1,11 +1,14 @@
 import styled from "styled-components"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+
+const TABS = ["인사말", "연혁", "강사"] as const;
 
 export const History = () => {
     const [selected, setSelected] = useState<string>('연혁');
     const navigate = useNavigate();
-    
+
     const handleSelect = (item: string) => {
         setSelected(item);
 
@@ -26,25 +29,34 @@ export const History = () => {
     return (
         <>
             <Wrapper>
-                <Container>
-                    <ListWrapper>
-                        {["인사말", "연혁", "강사"].map((item) => (
-                            <Circle
-                                key={item}
-                                onClick={() => handleSelect(item)}
-                                $isSelected={selected === item}
-                            >
-                                {item}
-                            </Circle>
-                        ))}
-                    </ListWrapper>
+                <PageTitle>클래스 소개</PageTitle>
+                <TabWrapper>
+                    {TABS.map((item) => (
+                        <Tab
+                            key={item}
+                            onClick={() => handleSelect(item)}
+                            $isSelected={selected === item}
+                        >
+                            {item}
+                            {selected === item && <TabIndicator layoutId="tab-indicator" />}
+                        </Tab>
+                    ))}
+                </TabWrapper>
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
                     <ContentWrapper>
-                        <p>연혁</p>
-                        <ContentBox>
-                            Korea Form-Taping Class 개설 (2018년 10월 1일)
-                        </ContentBox>
+                        <TimelineItem>
+                            <TimelineDot />
+                            <TimelineContent>
+                                <TimelineYear>2018</TimelineYear>
+                                <TimelineText>Korea Form-Taping Class 개설 (2018년 10월 1일)</TimelineText>
+                            </TimelineContent>
+                        </TimelineItem>
                     </ContentWrapper>
-                </Container>
+                </motion.div>
             </Wrapper>
         </>
     )
@@ -52,134 +64,111 @@ export const History = () => {
 
 const Wrapper = styled.div`
     display: flex;
-    padding-left: 270px;
-    padding-right: 270px;
     flex-direction: column;
-    height: calc(100vh - 90px - 84px);
+    padding: 70px 270px 80px;
+    min-height: calc(100vh - 84px);
     @media (max-width: 1300px) {
-        padding-left: 200px;
-        padding-right: 200px;
+        padding: 70px 200px 80px;
     }
     @media (max-width: 1175px) {
-        padding-left: 50px;
-        padding-right: 50px;
+        padding: 70px 50px 80px;
     }
     @media (max-width: 875px) {
-        padding-left: 30px;
-        padding-right: 30px;
+        padding: 40px 30px 60px;
     }
     @media (max-width: 768px) {
-        height: auto;
         min-height: calc(100vh - 60px);
-        padding-bottom: 40px;
     }
 `;
 
-const Container = styled.div`
-    display: flex;
-    justify-content: space-between;
-    gap: 100px;
-    margin-top: 70px;
-    height: 100%;
+const PageTitle = styled.h1`
+    font-size: 32px;
+    font-weight: 700;
     @media (max-width: 768px) {
-        flex-direction: column;
-        gap: 30px;
-        margin-top: 40px;
+        font-size: 24px;
     }
 `;
 
-const ListWrapper = styled.div`
+const TabWrapper = styled.div`
     display: flex;
-    flex-direction: column;
-    gap: 35px;
-    align-items: center;
+    gap: 10px;
+    margin-top: 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     @media (max-width: 768px) {
-        flex-direction: row;
-        justify-content: center;
-        gap: 20px;
+        margin-top: 20px;
     }
 `;
 
-const Circle = styled.div<{ $isSelected: boolean }>`
-    width: 90px;
-    height: 90px;
-    background-color: #355599;
-    font-size: 15px;
-    color: white;
-
-    ${({ $isSelected }) =>
-        $isSelected &&
-        `
-        width: 104px;
-        height: 104px;
-        background-color: #588DFF;
-        font-size: 20px;
-    `}
-
-    &:hover {
-        width: 104px;
-        height: 104px;
-        background-color: #588DFF;
-        font-size: 20px;
-    }
-
-    border-radius: 50%;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+const Tab = styled.div<{ $isSelected: boolean }>`
+    position: relative;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: ${({ $isSelected }) => $isSelected ? '600' : '400'};
+    color: ${({ $isSelected }) => $isSelected ? '#588DFF' : 'rgba(255, 255, 255, 0.5)'};
     cursor: pointer;
-    transition: all 0.2s;
-
-    @media (max-width: 768px) {
-        width: 70px;
-        height: 70px;
-        font-size: 13px;
-        ${({ $isSelected }) =>
-            $isSelected &&
-            `
-            width: 80px;
-            height: 80px;
-            font-size: 15px;
-        `}
-        &:hover {
-            width: 80px;
-            height: 80px;
-            font-size: 15px;
-        }
+    transition: color 0.3s;
+    &:hover {
+        color: ${({ $isSelected }) => $isSelected ? '#588DFF' : 'rgba(255, 255, 255, 0.8)'};
     }
+    @media (max-width: 768px) {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+`;
+
+const TabIndicator = styled(motion.div)`
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #588DFF;
+    border-radius: 1px;
 `;
 
 const ContentWrapper = styled.div`
+    margin-top: 50px;
     display: flex;
     flex-direction: column;
-    width: 100%;
-    margin-top: 50px;
-    height: 100%;
-    > p {
-        font-size: 25px;
-        font-weight: 600;
-    }
+    gap: 30px;
     @media (max-width: 768px) {
-        margin-top: 0;
-        > p {
-            font-size: 20px;
-        }
+        margin-top: 30px;
     }
 `;
 
-const ContentBox = styled.div`
+const TimelineItem = styled.div`
     display: flex;
-    margin-top: 25px;
-    border-top: 1px solid ${({theme}) => theme.border};
-    border-bottom: 1px solid ${({theme}) => theme.border};
-    padding-top: 30px;
-    padding-bottom: 30px;
-    min-height: 70%;
+    align-items: flex-start;
+    gap: 20px;
+`;
+
+const TimelineDot = styled.div`
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #588DFF;
+    flex-shrink: 0;
+    margin-top: 5px;
+    box-shadow: 0 0 12px rgba(88, 141, 255, 0.4);
+`;
+
+const TimelineContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+`;
+
+const TimelineYear = styled.span`
+    font-size: 14px;
+    font-weight: 600;
+    color: #588DFF;
+`;
+
+const TimelineText = styled.p`
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.6;
     @media (max-width: 768px) {
-        min-height: auto;
-        padding-top: 20px;
-        padding-bottom: 20px;
-        font-size: 14px;
+        font-size: 15px;
     }
 `;
