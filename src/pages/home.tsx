@@ -192,18 +192,27 @@ const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: calc(100vh - 65px);
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    @media (max-width: 768px) {
+        height: calc(100vh - 60px);
+    }
 `;
 
 const HeroSection = styled.div`
     position: relative;
     width: 100%;
     height: calc(100vh - 65px);
+    min-height: calc(100vh - 65px);
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    scroll-snap-align: start;
     @media (max-width: 768px) {
         height: calc(100vh - 60px);
+        min-height: calc(100vh - 60px);
     }
 `;
 
@@ -322,6 +331,7 @@ const ScrollArrow = styled.div`
     border-right: 2px solid white;
     border-bottom: 2px solid white;
     transform: rotate(45deg) translateY(-3px);
+    background-color: transparent;
 `;
 
 const ContentSection = styled.div`
@@ -329,6 +339,7 @@ const ContentSection = styled.div`
     flex-direction: column;
     padding: 100px 70px 120px;
     gap: 120px;
+    scroll-snap-align: start;
     @media (max-width: 1175px) {
         padding: 80px 50px 100px;
     }
